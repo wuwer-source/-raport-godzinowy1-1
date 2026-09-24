@@ -1,0 +1,318 @@
+import React from 'react';
+import { ReportRow } from '../types';
+import { calculateHours, isRowUsed, rowErrors } from '../utils/calculations';
+import { formatDatePL, getDayInfo } from '../utils/dateUtils';
+import { Copy, Plus, Trash2 } from 'lucide-react';
+import { TimeSelect15 } from './TimeSelect15';
+
+interface HoursTableProps {
+  rows: ReportRow[];
+  onRowChange: (id: string, field: keyof ReportRow, value: string) => void;
+  onDuplicateRow: (id: string) => void;
+  onDeleteRow: (id: string) => void;
+  onAddRows: (count: number) => void;
+  isPreview?: boolean;
+  disabled?: boolean;
+  pageBreakIndex?: number;
+}
+
+export const HoursTable: React.FC<HoursTableProps> = ({
+  rows,
+  onRowChange,
+  onDuplicateRow,
+  onDeleteRow,
+  onAddRows,
+  isPreview = false,
+  disabled = false,
+  pageBreakIndex,
+}) => {
+  return (
+    <section className="mb-2.5">
+      {/* Table Title - Placed cleanly above the table as requested */}
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-1.5 mb-1.5 avoid-break">
+        <div>
+          <span className="text-[10pt] font-extrabold text-[#0f2742] tracking-tight">
+            Rejestr godzin pracy / podróży
+          </span>
+          <span className="ml-1.5 text-[8pt] text-slate-500 italic">
+            Work / Travel Hours Log
+          </span>
+        </div>
+
+        {!isPreview && (
+          <div className="flex items-center gap-1.5 no-print">
+            <button
+              type="button"
+              disabled={disabled}
+              onClick={() => onAddRows(1)}
+              className="inline-flex items-center gap-1 px-2.5 py-1 text-[8.5pt] font-semibold text-slate-700 bg-white border border-slate-300 rounded hover:bg-slate-50 active:scale-95 transition-all shadow-2xs cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              <Plus className="w-3.5 h-3.5 text-blue-600" />
+              Dodaj wiersz
+            </button>
+            <button
+              type="button"
+              disabled={disabled}
+              onClick={() => onAddRows(5)}
+              className="inline-flex items-center gap-1 px-2.5 py-1 text-[8.5pt] font-semibold text-slate-700 bg-white border border-slate-300 rounded hover:bg-slate-50 active:scale-95 transition-all shadow-2xs cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              <Plus className="w-3.5 h-3.5 text-blue-600" />5 wierszy
+            </button>
+          </div>
+        )}
+      </div>
+
+      {/* Main Table - Sharp corners (ostre krawędzie) */}
+      <div className="w-full overflow-x-auto print:overflow-visible p-px">
+        <table className="doc-table w-full border-collapse border border-slate-500 text-slate-800 text-[8.5pt] rounded-none">
+          <thead>
+            <tr className="bg-[#dfe8f2] text-[#0f2742]">
+              <th className="w-[12%] print:w-[12%] py-1 px-1 text-center font-bold border border-slate-400 rounded-none">
+                Tryb pracy
+                <span className="block text-[6.8pt] font-medium text-slate-600 italic">Work mode</span>
+              </th>
+              <th className="w-[13%] print:w-[13%] py-1 px-1 text-center font-bold border border-slate-400 rounded-none">
+                Data
+                <span className="block text-[6.8pt] font-medium text-slate-600 italic">Date</span>
+              </th>
+              <th className="w-[6%] print:w-[6%] py-1 px-0.5 text-center font-bold border border-slate-400 rounded-none">
+                Wkd
+                <span className="block text-[6.8pt] font-medium text-slate-600 italic">Hol.</span>
+              </th>
+              <th className="w-[10%] print:w-[10%] py-1 px-0.5 text-center font-bold border border-slate-400 rounded-none">
+                Od
+                <span className="block text-[6.8pt] font-medium text-slate-600 italic">From</span>
+              </th>
+              <th className="w-[10%] print:w-[10%] py-1 px-0.5 text-center font-bold border border-slate-400 rounded-none">
+                Do
+                <span className="block text-[6.8pt] font-medium text-slate-600 italic">To</span>
+              </th>
+              <th className="w-[8%] print:w-[8%] py-1 px-0.5 text-center font-bold border border-slate-400 rounded-none">
+                Suma
+                <span className="block text-[6.8pt] font-medium text-slate-600 italic">Hours</span>
+              </th>
+              <th className={`${isPreview ? 'w-[41%]' : 'w-[36%] print:w-[41%]'} py-1 px-1.5 text-left font-bold border border-slate-400 rounded-none`}>
+                Opis wykonanych prac
+                <span className="block text-[6.8pt] font-medium text-slate-600 italic">Description of work</span>
+              </th>
+              {!isPreview && (
+                <th className="w-[5%] print:hidden py-1 px-0.5 text-center border border-slate-400 rounded-none">
+                  Akcje
+                </th>
+              )}
+            </tr>
+          </thead>
+
+          <tbody>
+            {rows.map((row, idx) => {
+              const h = calculateHours(row);
+              const dayInfo = getDayInfo(row.date);
+              const errs = rowErrors(row, idx);
+              const isInvalid = !disabled && isRowUsed(row) && errs.length > 0;
+              const hasHours = h > 0;
+              const showBreakHere = !isPreview && pageBreakIndex !== undefined && idx === pageBreakIndex;
+
+              return (
+                <React.Fragment key={row.id}>
+                  {showBreakHere && (
+                    <tr className="no-print">
+                      <td
+                        colSpan={8}
+                        className="p-0 border-y-2 border-dashed border-[#165d9c] bg-blue-50/90 text-center py-1.5 px-3 text-[8.2pt] font-extrabold text-[#0f2742] shadow-2xs"
+                      >
+                        <div className="flex items-center justify-center gap-2">
+                          <span className="text-sm">✂️</span>
+                          <span className="tracking-wide">
+                            LINIA PODZIAŁU STRONY A4: Powyższe wiersze (1–{pageBreakIndex}) zmieszczą się na Stronie 1. Kolejne wiersze znajdą się na Stronie 2.
+                          </span>
+                        </div>
+                      </td>
+                    </tr>
+                  )}
+                  <tr
+                    className={`border-b border-slate-300 transition-colors ${
+                      isInvalid
+                        ? 'bg-amber-50/80 hover:bg-amber-100/60 print:bg-white'
+                        : idx % 2 === 0
+                        ? 'bg-white'
+                        : 'bg-slate-50/50 hover:bg-slate-100/50 print:bg-white'
+                    }`}
+                  >
+                  {/* Category / Tryb pracy */}
+                  <td className="py-1 px-1 text-center border border-slate-300 align-middle">
+                    {isPreview ? (
+                      <span className="font-medium">
+                        {row.category === 'del' ? 'Delegacja' : row.category === 'biuro' ? 'Biuro' : ''}
+                      </span>
+                    ) : (
+                      <>
+                        <div className="no-print">
+                          <select
+                            value={row.category}
+                            disabled={disabled}
+                            onChange={(e) => onRowChange(row.id, 'category', e.target.value)}
+                            className="w-full text-[8.5pt] font-medium bg-transparent border-0 outline-hidden py-0.5 text-center cursor-pointer focus:bg-white focus:ring-1 focus:ring-blue-500 rounded disabled:opacity-50 disabled:cursor-not-allowed"
+                          >
+                            <option value="">—</option>
+                            <option value="del">Delegacja</option>
+                            <option value="biuro">Biuro</option>
+                          </select>
+                        </div>
+                        {/* Print only: Clean text or completely empty */}
+                        <div className="hidden print:block print-cell-text text-center text-[8pt] font-medium">
+                          {row.category === 'del' ? 'Delegacja' : row.category === 'biuro' ? 'Biuro' : ''}
+                        </div>
+                      </>
+                    )}
+                  </td>
+
+                  {/* Date */}
+                  <td className="py-1 px-1 text-center border border-slate-300 align-middle">
+                    {isPreview ? (
+                      <span className="font-medium">{row.date ? formatDatePL(row.date) : ''}</span>
+                    ) : (
+                      <>
+                        <div className="no-print">
+                          <input
+                            type="date"
+                            value={row.date}
+                            disabled={disabled}
+                            onChange={(e) => onRowChange(row.id, 'date', e.target.value)}
+                            className="w-full text-[8pt] bg-transparent border-0 outline-hidden py-0.5 px-0.5 text-center focus:bg-white focus:ring-1 focus:ring-blue-500 rounded disabled:opacity-50 disabled:cursor-not-allowed"
+                          />
+                        </div>
+                        {/* Print only: Clean date or completely empty */}
+                        <div className="hidden print:block print-cell-text text-center text-[8pt] font-medium">
+                          {row.date ? formatDatePL(row.date) : ''}
+                        </div>
+                      </>
+                    )}
+                  </td>
+
+                  {/* Weekend / Holiday */}
+                  <td
+                    className={`py-1 px-1 text-center border border-slate-300 align-middle font-bold ${
+                      dayInfo.holiday
+                        ? 'text-amber-800'
+                        : dayInfo.weekend
+                        ? 'text-blue-800'
+                        : 'text-slate-400'
+                    }`}
+                    title={dayInfo.name}
+                  >
+                    {row.date && dayInfo.holiday ? 'ŚW' : row.date && dayInfo.weekend ? '✓' : ''}
+                  </td>
+
+                  {/* From */}
+                  <td className="py-1 px-1 text-center border border-slate-300 align-middle">
+                    {isPreview ? (
+                      <span className="font-mono text-[8.5pt]">{row.from || ''}</span>
+                    ) : (
+                      <>
+                        <div className="no-print">
+                          <TimeSelect15
+                            value={row.from}
+                            disabled={disabled}
+                            onChange={(val) => onRowChange(row.id, 'from', val)}
+                          />
+                        </div>
+                        {/* Print only: Value or clean empty cell */}
+                        <div className="hidden print:block print-cell-text font-mono text-[8pt] text-center">
+                          {row.from || ''}
+                        </div>
+                      </>
+                    )}
+                  </td>
+
+                  {/* To */}
+                  <td className="py-1 px-1 text-center border border-slate-300 align-middle">
+                    {isPreview ? (
+                      <span className="font-mono text-[8.5pt]">{row.to || ''}</span>
+                    ) : (
+                      <>
+                        <div className="no-print">
+                          <TimeSelect15
+                            value={row.to}
+                            disabled={disabled}
+                            onChange={(val) => onRowChange(row.id, 'to', val)}
+                          />
+                        </div>
+                        {/* Print only: Value or clean empty cell */}
+                        <div className="hidden print:block print-cell-text font-mono text-[8pt] text-center">
+                          {row.to || ''}
+                        </div>
+                      </>
+                    )}
+                  </td>
+
+                  {/* Calculated Hours - In print: completely empty if 0 so handwriting can be used */}
+                  <td className="py-1 px-1 text-center border border-slate-300 align-middle font-bold text-[#0f2742]">
+                    <span className="no-print">
+                      {hasHours ? h.toFixed(2) : <span className="text-slate-300 text-[7.5pt]">—</span>}
+                    </span>
+                    <span className="hidden print:inline font-bold">
+                      {hasHours ? h.toFixed(2) : ''}
+                    </span>
+                  </td>
+
+                  {/* Description */}
+                  <td className="py-1 px-1.5 border border-slate-300 align-middle text-left">
+                    {isPreview ? (
+                      <div className="text-[8pt] whitespace-pre-wrap break-words leading-tight">
+                        {row.description || ''}
+                      </div>
+                    ) : (
+                      <>
+                        <div className="no-print">
+                          <textarea
+                            value={row.description}
+                            disabled={disabled}
+                            onChange={(e) => onRowChange(row.id, 'description', e.target.value)}
+                            rows={1}
+                            placeholder={disabled ? '' : 'Opis wykonanych prac...'}
+                            className="w-full text-[8pt] bg-transparent border-0 outline-hidden py-0.5 px-1.5 resize-y leading-snug focus:bg-white focus:ring-1 focus:ring-blue-500 rounded min-h-[24px] max-h-[140px] disabled:opacity-50 disabled:cursor-not-allowed"
+                          />
+                        </div>
+                        {/* Print only: text or clean empty space */}
+                        <div className="hidden print:block print-cell-text text-[7.8pt] whitespace-pre-wrap break-words leading-tight py-0.5 px-1 min-h-[21px]">
+                          {row.description || ''}
+                        </div>
+                      </>
+                    )}
+                  </td>
+
+                  {/* Actions column (desktop/screen only) */}
+                  {!isPreview && (
+                    <td className="py-1 px-0.5 text-center border border-slate-300 align-middle print:hidden no-print">
+                      <div className="flex items-center justify-center gap-0.5">
+                        <button
+                          type="button"
+                          disabled={disabled}
+                          onClick={() => onDuplicateRow(row.id)}
+                          title="Duplikuj i ustaw następny dzień"
+                          className="table-action-btn p-0.5 text-slate-600 hover:text-blue-700 hover:bg-slate-200 rounded cursor-pointer transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+                        >
+                          <Copy className="w-3.5 h-3.5" />
+                        </button>
+                        <button
+                          type="button"
+                          disabled={disabled}
+                          onClick={() => onDeleteRow(row.id)}
+                          title="Usuń wiersz"
+                          className="table-action-btn p-0.5 text-slate-600 hover:text-red-700 hover:bg-red-50 rounded cursor-pointer transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+                        >
+                          <Trash2 className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
+                    </td>
+                  )}
+                  </tr>
+                </React.Fragment>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+    </section>
+  );
+};

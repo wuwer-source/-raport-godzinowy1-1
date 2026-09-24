@@ -1,0 +1,175 @@
+@import "tailwindcss";
+
+:root {
+  --navy: #0f2742;
+  --blue: #165d9c;
+  --blue2: #0d4d86;
+  --line: #cbd5e1;
+  --line-dark: #64748b;
+  --surface: #ffffff;
+  --surface2: #f8fafc;
+  --surface3: #eef2f7;
+  --text: #0f172a;
+  --muted: #64748b;
+  --danger: #b42318;
+  --danger-bg: #fff1f0;
+  --warning: #9a6700;
+  --warning-bg: #fff8c5;
+  --success: #067647;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Page setup for print */
+@page {
+  size: A4 portrait;
+  margin: 8mm 8mm 8mm 8mm;
+}
+
+@media print {
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    color-adjust: exact !important;
+  }
+
+  /* CRITICAL: In PDF/print, NEVER show native controls, arrows, spinners or placeholders */
+  .no-print,
+  .doc-table select,
+  .doc-table input,
+  .doc-table textarea,
+  .table-action-btn,
+  input::-webkit-calendar-picker-indicator,
+  input::-webkit-inner-spin-button,
+  input::-webkit-clear-button {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+  }
+
+  /* Ensure print text containers are displayed */
+  .print-cell-text {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    width: 100% !important;
+    min-height: 21px !important;
+  }
+
+  html, body {
+    width: 100% !important;
+    min-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: #ffffff !important;
+    color: #000000 !important;
+    font-size: 8.2pt !important;
+  }
+
+  /* Exactly 1 physical page per .a4-print-page without blank pages */
+  .a4-print-page {
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
+    width: 100% !important;
+    height: 276mm !important;
+    max-height: 276mm !important;
+    box-sizing: border-box !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+    page-break-after: always !important;
+    break-after: page !important;
+    overflow: hidden !important;
+    background: #ffffff !important;
+  }
+
+  .a4-print-page:last-child {
+    page-break-after: auto !important;
+    break-after: auto !important;
+  }
+
+  /* In print, container must be block (not flex) so browser cleanly breaks pages between table rows */
+  .print-document {
+    display: block !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-height: auto !important;
+    height: auto !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: none !important;
+    box-shadow: none !important;
+    background: #ffffff !important;
+  }
+
+  /* Table styling in print - clean boxes ready for handwriting, sharp corners */
+  .doc-table {
+    width: 100% !important;
+    table-layout: fixed !important;
+    border-collapse: collapse !important;
+    border: 1px solid #475569 !important;
+    page-break-inside: auto !important;
+    break-inside: auto !important;
+  }
+
+  .doc-table thead {
+    display: table-header-group !important;
+  }
+
+  .doc-table tr {
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+    break-after: auto !important;
+  }
+
+  .doc-table th {
+    border: 1px solid #475569 !important;
+    background-color: #dfe8f2 !important;
+    padding: 2.5px 2px !important;
+    font-size: 7.5pt !important;
+  }
+
+  .doc-table td {
+    border: 1px solid #475569 !important;
+    padding: 2.5px 2px !important;
+    font-size: 7.8pt !important;
+    height: 23.5px !important;
+    min-height: 23.5px !important;
+    vertical-align: middle !important;
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
+
+  .avoid-break {
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
+
+  .meta-print-row {
+    border: 1px solid #94a3b8 !important;
+    background-color: #ffffff !important;
+  }
+}
+
+/* Custom Scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #94a3b8;
+  border-radius: 999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #64748b;
+}
