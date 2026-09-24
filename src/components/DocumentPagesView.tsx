@@ -76,18 +76,18 @@ export const DocumentPagesView: React.FC<DocumentPagesViewProps> = ({
               return (
                 <tr
                   key={row.id}
-                  className={`border-b border-slate-300 h-[22px] max-h-[22px] ${
+                  className={`border-b border-slate-300 min-h-[22px] ${
                     idx % 2 === 0 ? 'bg-white' : 'bg-slate-50/50 print:bg-white'
                   }`}
                 >
-                  <td className="py-0 px-1 text-center border border-slate-300 align-middle font-medium text-[7.8pt] h-[22px]">
+                  <td className="py-0 px-1 text-center border border-slate-300 align-middle font-medium text-[7.8pt]">
                     {row.category === 'del' ? 'Delegacja' : row.category === 'biuro' ? 'Biuro' : ''}
                   </td>
-                  <td className="py-0 px-1 text-center border border-slate-300 align-middle font-medium text-[7.8pt] h-[22px]">
+                  <td className="py-0 px-1 text-center border border-slate-300 align-middle font-medium text-[7.8pt]">
                     {row.date ? formatDatePL(row.date) : ''}
                   </td>
                   <td
-                    className={`py-0 px-1 text-center border border-slate-300 align-middle font-bold text-[7.8pt] h-[22px] ${
+                    className={`py-0 px-1 text-center border border-slate-300 align-middle font-bold text-[7.8pt] ${
                       dayInfo.holiday
                         ? 'text-amber-800'
                         : dayInfo.weekend
@@ -97,17 +97,22 @@ export const DocumentPagesView: React.FC<DocumentPagesViewProps> = ({
                   >
                     {row.date && dayInfo.holiday ? 'ŚW' : row.date && dayInfo.weekend ? '✓' : ''}
                   </td>
-                  <td className="py-0 px-1 text-center border border-slate-300 align-middle font-mono text-[7.8pt] h-[22px]">
+                  <td className="py-0 px-1 text-center border border-slate-300 align-middle font-mono text-[7.8pt]">
                     {row.from || ''}
                   </td>
-                  <td className="py-0 px-1 text-center border border-slate-300 align-middle font-mono text-[7.8pt] h-[22px]">
+                  <td className="py-0 px-1 text-center border border-slate-300 align-middle font-mono text-[7.8pt]">
                     {row.to || ''}
                   </td>
-                  <td className="py-0 px-1 text-center border border-slate-300 align-middle font-bold font-mono text-[7.8pt] text-[#0f2742] h-[22px]">
+                  <td className="py-0 px-1 text-center border border-slate-300 align-middle font-bold font-mono text-[7.8pt] text-[#0f2742]">
                     {hasHours ? h.toFixed(2) : ''}
                   </td>
-                  <td className="py-0 px-1.5 border border-slate-300 align-middle text-left font-normal text-[7.5pt] h-[22px] truncate leading-tight">
-                    {row.description || ''}
+                  <td className="py-0.5 px-1.5 border border-slate-300 align-middle text-left font-normal text-[7.8pt] leading-tight">
+                    <div
+                      className="whitespace-pre-wrap break-words leading-tight"
+                      style={row.rowHeight ? { minHeight: `${row.rowHeight}px` } : undefined}
+                    >
+                      {row.description || ''}
+                    </div>
                   </td>
                 </tr>
               );

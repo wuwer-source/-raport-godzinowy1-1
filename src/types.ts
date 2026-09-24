@@ -5,6 +5,7 @@ export interface ReportRow {
   from: string; // HH:MM
   to: string;   // HH:MM
   description: string;
+  rowHeight?: number; // Optional user-expanded or measured height in px
 }
 
 export interface ReportHeader {

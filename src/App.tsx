@@ -137,8 +137,45 @@ export default function App() {
     }
   }, [numberingSettings]);
 
-  // Pages breakdown for A4 preview and print
-  const pages = useMemo(() => computePages(rows), [rows]);
+  // Measured DOM row heights for dynamic distance-based pagination
+  const [measuredRowHeights, setMeasuredRowHeights] = useState<Record<string, number>>({});
+
+  // Dynamic measuring of DOM row heights whenever rows change, window resizes, or before print
+  const measureDomHeights = useCallback(() => {
+    const trs = document.querySelectorAll<HTMLTableRowElement>('tr[data-row-id]');
+    if (trs.length > 0) {
+      const map: Record<string, number> = {};
+      let changed = false;
+      trs.forEach((tr) => {
+        const id = tr.getAttribute('data-row-id');
+        if (id) {
+          const h = tr.offsetHeight;
+          map[id] = h;
+          if (measuredRowHeights[id] !== h) {
+            changed = true;
+          }
+        }
+      });
+      if (changed) {
+        setMeasuredRowHeights(map);
+      }
+    }
+  }, [measuredRowHeights]);
+
+  useEffect(() => {
+    measureDomHeights();
+    const timer = setTimeout(measureDomHeights, 100);
+    window.addEventListener('beforeprint', measureDomHeights);
+    window.addEventListener('resize', measureDomHeights);
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener('beforeprint', measureDomHeights);
+      window.removeEventListener('resize', measureDomHeights);
+    };
+  }, [measureDomHeights, rows]);
+
+  // Pages breakdown for A4 preview and print using dynamic distance-based algorithm
+  const pages = useMemo(() => computePages(rows, measuredRowHeights), [rows, measuredRowHeights]);
   const totalPages = pages.length;
   const pageBreakIndex = pages.length > 1 ? pages[0].rows.length : undefined;
 
@@ -190,7 +227,7 @@ export default function App() {
   }, []);
 
   // Update rows
-  const handleRowChange = useCallback((id: string, field: keyof ReportRow, value: string) => {
+  const handleRowChange = useCallback((id: string, field: keyof ReportRow, value: string | number) => {
     setRows((prev) =>
       prev.map((r) => (r.id === id ? { ...r, [field]: value } : r))
     );

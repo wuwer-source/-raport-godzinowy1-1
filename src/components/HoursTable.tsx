@@ -7,7 +7,7 @@ import { TimeSelect15 } from './TimeSelect15';
 
 interface HoursTableProps {
   rows: ReportRow[];
-  onRowChange: (id: string, field: keyof ReportRow, value: string) => void;
+  onRowChange: (id: string, field: keyof ReportRow, value: string | number) => void;
   onDuplicateRow: (id: string) => void;
   onDeleteRow: (id: string) => void;
   onAddRows: (count: number) => void;
@@ -131,7 +131,8 @@ export const HoursTable: React.FC<HoursTableProps> = ({
                   )}
                   <tr
                     key={row.id}
-                    className={`border-b border-slate-300 transition-colors h-[22px] max-h-[22px] ${
+                    data-row-id={row.id}
+                    className={`border-b border-slate-300 transition-colors min-h-[22px] ${
                       isInvalid
                         ? 'bg-amber-50/80 hover:bg-amber-100/60 print:bg-white'
                         : idx % 2 === 0
@@ -140,7 +141,7 @@ export const HoursTable: React.FC<HoursTableProps> = ({
                     }`}
                   >
                   {/* Category / Tryb pracy */}
-                  <td className="py-0 px-1 text-center border border-slate-300 align-middle h-[22px]">
+                  <td className="py-0 px-1 text-center border border-slate-300 align-middle">
                     {isPreview ? (
                       <span className="font-medium text-[7.8pt]">
                         {row.category === 'del' ? 'Delegacja' : row.category === 'biuro' ? 'Biuro' : ''}
@@ -257,9 +258,12 @@ export const HoursTable: React.FC<HoursTableProps> = ({
                   </td>
 
                   {/* Description */}
-                  <td className="py-0 px-1 border border-slate-300 align-middle text-left h-[22px]">
+                  <td className="py-0.5 px-1 border border-slate-300 align-middle text-left">
                     {isPreview ? (
-                      <div className="text-[7.5pt] whitespace-pre-wrap break-words leading-tight truncate">
+                      <div
+                        className="text-[7.8pt] whitespace-pre-wrap break-words leading-tight py-0.5 px-1"
+                        style={row.rowHeight ? { minHeight: `${row.rowHeight}px` } : undefined}
+                      >
                         {row.description || ''}
                       </div>
                     ) : (
@@ -269,13 +273,23 @@ export const HoursTable: React.FC<HoursTableProps> = ({
                             value={row.description}
                             disabled={disabled}
                             onChange={(e) => onRowChange(row.id, 'description', e.target.value)}
+                            onMouseUp={(e) => {
+                              const el = e.currentTarget;
+                              if (el && el.offsetHeight && Math.abs(el.offsetHeight - (row.rowHeight || 24)) > 2) {
+                                onRowChange(row.id, 'rowHeight', el.offsetHeight);
+                              }
+                            }}
                             rows={1}
                             placeholder={disabled ? '' : 'Opis wykonanych prac...'}
-                            className="w-full text-[7.8pt] bg-transparent border-0 outline-hidden py-0 px-1 resize-none leading-snug focus:bg-white focus:ring-1 focus:ring-blue-500 rounded h-[22px] min-h-[22px] max-h-[22px] disabled:opacity-50 disabled:cursor-not-allowed"
+                            style={row.rowHeight ? { height: `${row.rowHeight}px` } : undefined}
+                            className="w-full text-[8pt] bg-transparent border border-transparent hover:border-slate-300 focus:border-[#165d9c] outline-hidden py-0.5 px-1 resize-y leading-tight focus:bg-white focus:ring-1 focus:ring-blue-500 rounded min-h-[24px] max-h-[160px] disabled:opacity-50 disabled:cursor-not-allowed cursor-text"
                           />
                         </div>
                         {/* Print only: text or clean empty space */}
-                        <div className="hidden print:block print-cell-text text-[7.5pt] whitespace-pre-wrap break-words leading-tight py-0 px-1 min-h-[20px]">
+                        <div
+                          className="hidden print:block print-cell-text text-[7.8pt] whitespace-pre-wrap break-words leading-tight py-0.5 px-1"
+                          style={row.rowHeight ? { minHeight: `${row.rowHeight}px` } : undefined}
+                        >
                           {row.description || ''}
                         </div>
                       </>
