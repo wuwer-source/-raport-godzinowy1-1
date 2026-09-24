@@ -27,7 +27,7 @@ export const HoursTable: React.FC<HoursTableProps> = ({
   pageBreakIndex,
 }) => {
   // Real-time drag resize handler for row height with visible grip handle
-  const handleStartResize = (e: React.MouseEvent, rowId: string, currentHeight: number = 30) => {
+  const handleStartResize = (e: React.MouseEvent, rowId: string, currentHeight: number = 38) => {
     e.preventDefault();
     e.stopPropagation();
     const startY = e.clientY;
@@ -35,7 +35,7 @@ export const HoursTable: React.FC<HoursTableProps> = ({
 
     const onMouseMove = (moveEvent: MouseEvent) => {
       const deltaY = moveEvent.clientY - startY;
-      const newHeight = Math.max(30, Math.min(260, Math.round(initialH + deltaY)));
+      const newHeight = Math.max(38, Math.min(260, Math.round(initialH + deltaY)));
       onRowChange(rowId, 'rowHeight', newHeight);
     };
 
@@ -87,24 +87,24 @@ export const HoursTable: React.FC<HoursTableProps> = ({
       <div className="w-full overflow-x-auto print:overflow-visible p-px">
         <table className="doc-table w-full border-collapse border border-slate-500 text-slate-800 text-[8.5pt] rounded-none">
           <thead>
-            <tr className="bg-[#dfe8f2] text-[#0f2742]">
+            <tr className="bg-[#dfe8f2] text-[#0f2742] h-[30px]">
               <th className="w-[12%] print:w-[12%] py-1 px-1 text-center font-bold border border-slate-400 rounded-none">
                 Tryb pracy
                 <span className="block text-[6.8pt] font-medium text-slate-600 italic">Work mode</span>
               </th>
-              <th className="w-[13%] print:w-[13%] py-1 px-1 text-center font-bold border border-slate-400 rounded-none">
+              <th className="w-[12%] print:w-[12%] py-1 px-1 text-center font-bold border border-slate-400 rounded-none">
                 Data
                 <span className="block text-[6.8pt] font-medium text-slate-600 italic">Date</span>
               </th>
-              <th className="w-[6%] print:w-[6%] py-1 px-0.5 text-center font-bold border border-slate-400 rounded-none">
+              <th className="w-[5%] print:w-[5%] py-1 px-0.5 text-center font-bold border border-slate-400 rounded-none">
                 Wkd
                 <span className="block text-[6.8pt] font-medium text-slate-600 italic">Hol.</span>
               </th>
-              <th className="w-[10%] print:w-[10%] py-1 px-0.5 text-center font-bold border border-slate-400 rounded-none">
+              <th className="w-[9%] print:w-[9%] py-1 px-0.5 text-center font-bold border border-slate-400 rounded-none">
                 Od
                 <span className="block text-[6.8pt] font-medium text-slate-600 italic">From</span>
               </th>
-              <th className="w-[10%] print:w-[10%] py-1 px-0.5 text-center font-bold border border-slate-400 rounded-none">
+              <th className="w-[9%] print:w-[9%] py-1 px-0.5 text-center font-bold border border-slate-400 rounded-none">
                 Do
                 <span className="block text-[6.8pt] font-medium text-slate-600 italic">To</span>
               </th>
@@ -112,7 +112,7 @@ export const HoursTable: React.FC<HoursTableProps> = ({
                 Suma
                 <span className="block text-[6.8pt] font-medium text-slate-600 italic">Hours</span>
               </th>
-              <th className={`${isPreview ? 'w-[41%]' : 'w-[36%] print:w-[41%]'} py-1 px-1.5 text-left font-bold border border-slate-400 rounded-none`}>
+              <th className={`${isPreview ? 'w-[45%]' : 'w-[40%] print:w-[45%]'} py-1 px-1.5 text-left font-bold border border-slate-400 rounded-none`}>
                 Opis wykonanych prac
                 <span className="block text-[6.8pt] font-medium text-slate-600 italic">Description of work</span>
               </th>
@@ -132,6 +132,7 @@ export const HoursTable: React.FC<HoursTableProps> = ({
               const isInvalid = !disabled && isRowUsed(row) && errs.length > 0;
               const hasHours = h > 0;
               const showBreakHere = !isPreview && pageBreakIndex !== undefined && idx === pageBreakIndex;
+              const rowH = row.rowHeight ? Math.max(row.rowHeight, 38) : 38;
 
               return (
                 <React.Fragment key={row.id}>
@@ -153,7 +154,8 @@ export const HoursTable: React.FC<HoursTableProps> = ({
                   <tr
                     key={row.id}
                     data-row-id={row.id}
-                    className={`border-b border-slate-300 transition-colors min-h-[29px] ${
+                    style={{ height: `${rowH}px` }}
+                    className={`border-b border-slate-300 transition-colors h-[38px] min-h-[38px] ${
                       isInvalid
                         ? 'bg-amber-50/80 hover:bg-amber-100/60 print:bg-white'
                         : idx % 2 === 0
@@ -162,10 +164,10 @@ export const HoursTable: React.FC<HoursTableProps> = ({
                     }`}
                   >
                   {/* Category / Tryb pracy */}
-                  <td className="py-0 px-1 text-center border border-slate-300 align-middle">
+                  <td className="py-0 px-1 text-center border border-slate-300 align-middle h-[38px]">
                     {isPreview ? (
                       <span className="font-medium text-[8.5pt]">
-                        {row.category === 'del' ? 'Delegacja' : row.category === 'biuro' ? 'Biuro' : ''}
+                        {row.category === 'del' ? 'Delegacja' : row.category === 'biuro' ? 'Biuro' : '\u00A0'}
                       </span>
                     ) : (
                       <>
@@ -174,7 +176,7 @@ export const HoursTable: React.FC<HoursTableProps> = ({
                             value={row.category}
                             disabled={disabled}
                             onChange={(e) => onRowChange(row.id, 'category', e.target.value)}
-                            className="w-full text-[8.5pt] font-medium bg-transparent border-0 outline-hidden py-0 text-center cursor-pointer focus:bg-white focus:ring-1 focus:ring-blue-500 rounded disabled:opacity-50 disabled:cursor-not-allowed h-[26px]"
+                            className="w-full text-[8.5pt] font-medium bg-transparent border-0 outline-hidden py-0 text-center cursor-pointer focus:bg-white focus:ring-1 focus:ring-blue-500 rounded disabled:opacity-50 disabled:cursor-not-allowed h-[32px]"
                           >
                             <option value="">—</option>
                             <option value="del">Delegacja</option>
@@ -190,9 +192,9 @@ export const HoursTable: React.FC<HoursTableProps> = ({
                   </td>
 
                   {/* Date */}
-                  <td className="py-0 px-1 text-center border border-slate-300 align-middle h-[26px]">
+                  <td className="py-0 px-1 text-center border border-slate-300 align-middle h-[38px]">
                     {isPreview ? (
-                      <span className="font-medium text-[8.5pt]">{row.date ? formatDatePL(row.date) : ''}</span>
+                      <span className="font-medium text-[8.5pt]">{row.date ? formatDatePL(row.date) : '\u00A0'}</span>
                     ) : (
                       <>
                         <div className="no-print">
@@ -201,7 +203,7 @@ export const HoursTable: React.FC<HoursTableProps> = ({
                             value={row.date}
                             disabled={disabled}
                             onChange={(e) => onRowChange(row.id, 'date', e.target.value)}
-                            className="w-full text-[8.5pt] bg-transparent border-0 outline-hidden py-0 px-0.5 text-center focus:bg-white focus:ring-1 focus:ring-blue-500 rounded disabled:opacity-50 disabled:cursor-not-allowed h-[26px]"
+                            className="w-full text-[8.5pt] bg-transparent border-0 outline-hidden py-0 px-0.5 text-center focus:bg-white focus:ring-1 focus:ring-blue-500 rounded disabled:opacity-50 disabled:cursor-not-allowed h-[32px]"
                           />
                         </div>
                         {/* Print only: Clean date or completely empty */}
@@ -214,7 +216,7 @@ export const HoursTable: React.FC<HoursTableProps> = ({
 
                   {/* Weekend / Holiday */}
                   <td
-                    className={`py-0 px-0.5 text-center border border-slate-300 align-middle font-bold text-[8.5pt] h-[26px] ${
+                    className={`py-0 px-0.5 text-center border border-slate-300 align-middle font-bold text-[8.5pt] h-[38px] ${
                       dayInfo.holiday
                         ? 'text-amber-800'
                         : dayInfo.weekend
@@ -227,9 +229,9 @@ export const HoursTable: React.FC<HoursTableProps> = ({
                   </td>
 
                   {/* From */}
-                  <td className="py-0 px-0.5 text-center border border-slate-300 align-middle h-[26px]">
+                  <td className="py-0 px-0.5 text-center border border-slate-300 align-middle h-[38px]">
                     {isPreview ? (
-                      <span className="font-mono text-[8.5pt]">{row.from || ''}</span>
+                      <span className="font-mono text-[8.5pt]">{row.from || '\u00A0'}</span>
                     ) : (
                       <>
                         <div className="no-print">
@@ -248,9 +250,9 @@ export const HoursTable: React.FC<HoursTableProps> = ({
                   </td>
 
                   {/* To */}
-                  <td className="py-0 px-0.5 text-center border border-slate-300 align-middle h-[26px]">
+                  <td className="py-0 px-0.5 text-center border border-slate-300 align-middle h-[38px]">
                     {isPreview ? (
-                      <span className="font-mono text-[8.5pt]">{row.to || ''}</span>
+                      <span className="font-mono text-[8.5pt]">{row.to || '\u00A0'}</span>
                     ) : (
                       <>
                         <div className="no-print">
@@ -269,7 +271,7 @@ export const HoursTable: React.FC<HoursTableProps> = ({
                   </td>
 
                   {/* Calculated Hours - In print: completely empty if 0 so handwriting can be used */}
-                  <td className="py-1 px-0.5 text-center border border-slate-300 align-middle font-bold text-[#0f2742] text-[8.5pt]">
+                  <td className="py-1 px-0.5 text-center border border-slate-300 align-middle font-bold text-[#0f2742] text-[8.5pt] h-[38px]">
                     <span className="no-print">
                       {hasHours ? h.toFixed(2) : <span className="text-slate-300 text-[7.5pt]">—</span>}
                     </span>
@@ -279,17 +281,17 @@ export const HoursTable: React.FC<HoursTableProps> = ({
                   </td>
 
                   {/* Description - with visible drag handle for resizing and word wrap */}
-                  <td className="desc-cell py-1 px-1 border border-slate-300 align-middle text-left relative">
+                  <td className="desc-cell py-1 px-1 border border-slate-300 align-middle text-left relative h-[38px]">
                     {isPreview ? (
                       <div
                         className="desc-print-content text-[8.5pt] whitespace-pre-wrap break-words leading-relaxed py-0.5 px-1"
                         style={{
                           wordBreak: 'break-word',
                           overflowWrap: 'anywhere',
-                          minHeight: row.rowHeight ? `${row.rowHeight}px` : undefined,
+                          minHeight: `${Math.max(rowH - 10, 28)}px`,
                         }}
                       >
-                        {row.description || ''}
+                        {row.description || '\u00A0'}
                       </div>
                     ) : (
                       <>
@@ -300,7 +302,7 @@ export const HoursTable: React.FC<HoursTableProps> = ({
                             onChange={(e) => onRowChange(row.id, 'description', e.target.value)}
                             onMouseUp={(e) => {
                               const el = e.currentTarget;
-                              if (el && el.offsetHeight && Math.abs(el.offsetHeight - (row.rowHeight || 29)) > 2) {
+                              if (el && el.offsetHeight && Math.abs(el.offsetHeight - (row.rowHeight || 38)) > 2) {
                                 onRowChange(row.id, 'rowHeight', el.offsetHeight);
                               }
                             }}
@@ -308,14 +310,14 @@ export const HoursTable: React.FC<HoursTableProps> = ({
                             placeholder={disabled ? '' : 'Opis wykonanych prac...'}
                             style={{
                               height: row.rowHeight ? `${row.rowHeight}px` : undefined,
-                              minHeight: '29px',
+                              minHeight: '36px',
                               resize: 'vertical',
                             }}
-                            className="desc-resize-textarea w-full text-[8.5pt] bg-white border border-slate-300 hover:border-slate-400 focus:border-[#165d9c] outline-hidden py-1 px-1.5 pr-5 leading-snug rounded focus:ring-1 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed cursor-text"
+                            className="desc-resize-textarea w-full text-[8.5pt] bg-white border border-slate-300 hover:border-slate-400 focus:border-[#165d9c] outline-hidden py-1.5 px-1.5 pr-5 leading-snug rounded focus:ring-1 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed cursor-text"
                           />
                           {/* Znaczek poszerzenia / Drag Handle - Always visible to drag and resize row */}
                           <div
-                            onMouseDown={(e) => handleStartResize(e, row.id, row.rowHeight || 29)}
+                            onMouseDown={(e) => handleStartResize(e, row.id, row.rowHeight || 38)}
                             title="Przeciągnij w dół, aby poszerzyć/zwiększyć wysokość wiersza"
                             className="absolute bottom-1 right-1 cursor-ns-resize p-0.5 text-slate-400 hover:text-[#165d9c] hover:bg-blue-50 rounded transition-colors select-none group/grip"
                           >
@@ -330,10 +332,10 @@ export const HoursTable: React.FC<HoursTableProps> = ({
                           style={{
                             wordBreak: 'break-word',
                             overflowWrap: 'anywhere',
-                            minHeight: row.rowHeight ? `${row.rowHeight}px` : undefined,
+                            minHeight: `${Math.max(rowH - 10, 28)}px`,
                           }}
                         >
-                          {row.description || ''}
+                          {row.description || '\u00A0'}
                         </div>
                       </>
                     )}
@@ -341,7 +343,7 @@ export const HoursTable: React.FC<HoursTableProps> = ({
 
                   {/* Actions column (desktop/screen only) */}
                   {!isPreview && (
-                    <td className="py-1 px-0.5 text-center border border-slate-300 align-middle print:hidden no-print">
+                    <td className="py-1 px-0.5 text-center border border-slate-300 align-middle print:hidden no-print h-[38px]">
                       <div className="flex items-center justify-center gap-0.5">
                         <button
                           type="button"

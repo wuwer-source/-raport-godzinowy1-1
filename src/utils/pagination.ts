@@ -34,17 +34,17 @@ export const SUMMARY_HEIGHT = 52;
 // Minimum safe distance 'X' between last row / SummarySection and FooterSignatures
 export const MIN_DISTANCE_X = 20;
 
-// Base compact row height (+30% increased as requested by user, ~29-30px)
-export const BASE_ROW_HEIGHT = 30;
+// Base compact row height (+30% increased for comfortable handwriting with a pen, ~38px / 10mm)
+export const BASE_ROW_HEIGHT = 38;
 
 export function getEstimatedRowHeight(
   row: ReportRow,
   measuredHeights?: Record<string, number>
 ): number {
-  if (measuredHeights && measuredHeights[row.id] && measuredHeights[row.id] >= 28) {
+  if (measuredHeights && measuredHeights[row.id] && measuredHeights[row.id] >= BASE_ROW_HEIGHT) {
     return measuredHeights[row.id];
   }
-  if (row.rowHeight && row.rowHeight >= 28) {
+  if (row.rowHeight && row.rowHeight >= BASE_ROW_HEIGHT) {
     return row.rowHeight;
   }
   // Calculate based on line breaks and text length
@@ -54,9 +54,9 @@ export function getEstimatedRowHeight(
   const lines = text.split('\n');
   let visualLines = 0;
   for (const line of lines) {
-    visualLines += Math.max(1, Math.ceil(line.length / 36));
+    visualLines += Math.max(1, Math.ceil(line.length / 42));
   }
-  return Math.max(BASE_ROW_HEIGHT, BASE_ROW_HEIGHT + (visualLines - 1) * 16);
+  return Math.max(BASE_ROW_HEIGHT, BASE_ROW_HEIGHT + (visualLines - 1) * 18);
 }
 
 export function computePages(

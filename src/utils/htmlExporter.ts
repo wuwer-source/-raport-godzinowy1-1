@@ -116,12 +116,15 @@ export function exportEditableHtmlFile(header: ReportHeader, rows: ReportRow[]):
         break-inside: avoid !important;
         page-break-inside: avoid !important;
         break-after: auto !important;
+        height: 38px !important;
+        min-height: 38px !important;
       }
       .doc-table td {
         border: 1px solid #64748b !important;
-        padding: 3px 4px !important;
-        font-size: 8.2pt !important;
-        min-height: 29px !important;
+        padding: 4px 4px !important;
+        font-size: 8.5pt !important;
+        height: 38px !important;
+        min-height: 38px !important;
         vertical-align: middle !important;
         break-inside: avoid !important;
         page-break-inside: avoid !important;
@@ -372,14 +375,14 @@ export function exportEditableHtmlFile(header: ReportHeader, rows: ReportRow[]):
         <div class="w-full overflow-x-auto print:overflow-visible">
           <table class="doc-table w-full border-collapse border border-slate-500 text-slate-800 text-[8.5pt] rounded-none">
             <thead>
-              <tr class="bg-[#dfe8f2] text-[#0f2742]">
+              <tr class="bg-[#dfe8f2] text-[#0f2742] h-[30px]">
                 <th class="w-[12%] py-1.5 px-1 text-center font-bold border border-slate-400 rounded-none">Tryb pracy<span class="block text-[6.8pt] font-medium text-slate-600 italic">Work mode</span></th>
-                <th class="w-[13%] py-1.5 px-1 text-center font-bold border border-slate-400 rounded-none">Data<span class="block text-[6.8pt] font-medium text-slate-600 italic">Date</span></th>
-                <th class="w-[6%] py-1.5 px-0.5 text-center font-bold border border-slate-400 rounded-none">Wkd<span class="block text-[6.8pt] font-medium text-slate-600 italic">Hol.</span></th>
-                <th class="w-[10%] py-1.5 px-0.5 text-center font-bold border border-slate-400 rounded-none">Od<span class="block text-[6.8pt] font-medium text-slate-600 italic">From</span></th>
-                <th class="w-[10%] py-1.5 px-0.5 text-center font-bold border border-slate-400 rounded-none">Do<span class="block text-[6.8pt] font-medium text-slate-600 italic">To</span></th>
+                <th class="w-[12%] py-1.5 px-1 text-center font-bold border border-slate-400 rounded-none">Data<span class="block text-[6.8pt] font-medium text-slate-600 italic">Date</span></th>
+                <th class="w-[5%] py-1.5 px-0.5 text-center font-bold border border-slate-400 rounded-none">Wkd<span class="block text-[6.8pt] font-medium text-slate-600 italic">Hol.</span></th>
+                <th class="w-[9%] py-1.5 px-0.5 text-center font-bold border border-slate-400 rounded-none">Od<span class="block text-[6.8pt] font-medium text-slate-600 italic">From</span></th>
+                <th class="w-[9%] py-1.5 px-0.5 text-center font-bold border border-slate-400 rounded-none">Do<span class="block text-[6.8pt] font-medium text-slate-600 italic">To</span></th>
                 <th class="w-[8%] py-1.5 px-0.5 text-center font-bold border border-slate-400 rounded-none">Suma<span class="block text-[6.8pt] font-medium text-slate-600 italic">Hours</span></th>
-                <th class="w-[36%] print:w-[41%] py-1.5 px-2 text-left font-bold border border-slate-400 rounded-none">Opis wykonanych prac<span class="block text-[6.8pt] font-medium text-slate-600 italic">Description of work</span></th>
+                <th class="w-[40%] print:w-[45%] py-1.5 px-2 text-left font-bold border border-slate-400 rounded-none">Opis wykonanych prac<span class="block text-[6.8pt] font-medium text-slate-600 italic">Description of work</span></th>
                 <th class="w-[5%] print:hidden py-1.5 px-0.5 text-center border border-slate-400 no-print rounded-none">Akcje</th>
               </tr>
             </thead>
@@ -474,7 +477,8 @@ export function exportEditableHtmlFile(header: ReportHeader, rows: ReportRow[]):
 
       reportRows.forEach((r, idx) => {
         const tr = document.createElement('tr');
-        tr.className = 'border-b border-slate-300 ' + (idx % 2 === 0 ? 'bg-white' : 'bg-slate-50/50');
+        tr.style.height = '38px';
+        tr.className = 'border-b border-slate-300 h-[38px] min-h-[38px] ' + (idx % 2 === 0 ? 'bg-white' : 'bg-slate-50/50');
         
         let fromOptions = '<option value="">—</option>' + timeOptions.map(t => 
           '<option value="' + t + '"' + (r.from === t ? ' selected' : '') + '>' + t + '</option>'
@@ -487,50 +491,50 @@ export function exportEditableHtmlFile(header: ReportHeader, rows: ReportRow[]):
         const catName = r.category === 'del' ? 'Delegacja' : r.category === 'biuro' ? 'Biuro' : '';
 
         tr.innerHTML = \`
-          <td class="p-1 text-center border border-slate-300 align-middle">
+          <td class="p-1 text-center border border-slate-300 align-middle h-[38px]">
             <div class="no-print">
-              <select onchange="updateRow(\${idx}, 'category', this.value)" class="w-full text-[8.5pt] font-medium bg-transparent border-0 outline-hidden py-0.5 text-center cursor-pointer">
+              <select onchange="updateRow(\${idx}, 'category', this.value)" class="w-full text-[8.5pt] font-medium bg-transparent border-0 outline-hidden py-0.5 text-center cursor-pointer h-[32px]">
                 <option value="" \${r.category === '' ? 'selected' : ''}>—</option>
                 <option value="del" \${r.category === 'del' ? 'selected' : ''}>Delegacja</option>
                 <option value="biuro" \${r.category === 'biuro' ? 'selected' : ''}>Biuro</option>
               </select>
             </div>
-            <div class="hidden print:block print-cell-text text-center text-[8pt] font-medium">\${catName}</div>
+            <div class="hidden print:block print-cell-text text-center text-[8pt] font-medium">\${catName || '&nbsp;'}</div>
           </td>
-          <td class="p-1 text-center border border-slate-300 align-middle">
+          <td class="p-1 text-center border border-slate-300 align-middle h-[38px]">
             <div class="no-print">
-              <input type="date" value="\${r.date || ''}" onchange="updateRow(\${idx}, 'date', this.value)" class="w-full text-[8pt] bg-transparent border-0 outline-hidden p-0.5 text-center" />
+              <input type="date" value="\${r.date || ''}" onchange="updateRow(\${idx}, 'date', this.value)" class="w-full text-[8pt] bg-transparent border-0 outline-hidden p-0.5 text-center h-[32px]" />
             </div>
-            <div class="hidden print:block print-cell-text text-center text-[8pt] font-medium">\${r.date || ''}</div>
+            <div class="hidden print:block print-cell-text text-center text-[8pt] font-medium">\${r.date || '&nbsp;'}</div>
           </td>
-          <td class="p-1 text-center border border-slate-300 align-middle font-bold text-slate-500" id="wkd_\${idx}"></td>
-          <td class="p-1 text-center border border-slate-300 align-middle">
+          <td class="p-1 text-center border border-slate-300 align-middle font-bold text-slate-500 h-[38px]" id="wkd_\${idx}"></td>
+          <td class="p-1 text-center border border-slate-300 align-middle h-[38px]">
             <div class="no-print">
-              <select onchange="updateRow(\${idx}, 'from', this.value)" class="w-full text-[8.5pt] font-mono font-medium bg-transparent border-0 outline-hidden py-1 px-0.5 text-center cursor-pointer">
+              <select onchange="updateRow(\${idx}, 'from', this.value)" class="w-full text-[8.5pt] font-mono font-medium bg-transparent border-0 outline-hidden py-1 px-0.5 text-center cursor-pointer h-[32px]">
                 \${fromOptions}
               </select>
             </div>
-            <div class="hidden print:block print-cell-text font-mono text-[8pt] text-center">\${r.from || ''}</div>
+            <div class="hidden print:block print-cell-text font-mono text-[8pt] text-center">\${r.from || '&nbsp;'}</div>
           </td>
-          <td class="p-1 text-center border border-slate-300 align-middle">
+          <td class="p-1 text-center border border-slate-300 align-middle h-[38px]">
             <div class="no-print">
-              <select onchange="updateRow(\${idx}, 'to', this.value)" class="w-full text-[8.5pt] font-mono font-medium bg-transparent border-0 outline-hidden py-1 px-0.5 text-center cursor-pointer">
+              <select onchange="updateRow(\${idx}, 'to', this.value)" class="w-full text-[8.5pt] font-mono font-medium bg-transparent border-0 outline-hidden py-1 px-0.5 text-center cursor-pointer h-[32px]">
                 \${toOptions}
               </select>
             </div>
-            <div class="hidden print:block print-cell-text font-mono text-[8pt] text-center">\${r.to || ''}</div>
+            <div class="hidden print:block print-cell-text font-mono text-[8pt] text-center">\${r.to || '&nbsp;'}</div>
           </td>
-          <td class="p-1 text-center border border-slate-300 align-middle font-bold text-[#0f2742]">
+          <td class="p-1 text-center border border-slate-300 align-middle font-bold text-[#0f2742] h-[38px]">
             <span class="no-print" id="hrs_\${idx}"></span>
             <span class="hidden print:inline" id="hrs_print_\${idx}"></span>
           </td>
-          <td class="p-1 border border-slate-300 align-middle text-left">
+          <td class="p-1 border border-slate-300 align-middle text-left h-[38px]">
             <div class="no-print">
-              <textarea onchange="updateRow(\${idx}, 'description', this.value)" placeholder="Opis wykonanych prac..." class="w-full text-[8pt] bg-transparent border-0 outline-hidden py-1 px-1.5 resize-y leading-snug min-h-[28px]">\${r.description || ''}</textarea>
+              <textarea onchange="updateRow(\${idx}, 'description', this.value)" placeholder="Opis wykonanych prac..." class="w-full text-[8pt] bg-transparent border-0 outline-hidden py-1.5 px-1.5 resize-y leading-snug min-h-[36px]">\${r.description || ''}</textarea>
             </div>
-            <div class="hidden print:block print-cell-text text-[8.2pt] whitespace-pre-wrap break-words leading-tight py-1 px-1 min-h-[29px]">\${r.description || ''}</div>
+            <div class="hidden print:block print-cell-text text-[8.2pt] whitespace-pre-wrap break-words leading-tight py-1 px-1 min-h-[30px]">\${r.description || '&nbsp;'}</div>
           </td>
-          <td class="p-1 text-center border border-slate-300 align-middle no-print">
+          <td class="p-1 text-center border border-slate-300 align-middle no-print h-[38px]">
             <button type="button" onclick="deleteRow(\${idx})" title="Usuń wiersz" class="p-1 text-slate-400 hover:text-red-600 cursor-pointer">🗑️</button>
           </td>
         \`;

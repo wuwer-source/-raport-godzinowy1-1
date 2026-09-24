@@ -38,24 +38,24 @@ export const DocumentPagesView: React.FC<DocumentPagesViewProps> = ({
       <div className="w-full overflow-hidden">
         <table className="doc-table w-full border-collapse border border-slate-500 text-slate-800 text-[8.2pt] rounded-none">
           <thead>
-            <tr className="bg-[#dfe8f2] text-[#0f2742] h-[28px]">
+            <tr className="bg-[#dfe8f2] text-[#0f2742] h-[30px]">
               <th className="w-[12%] py-1 px-1 text-center font-bold border border-slate-400 rounded-none text-[7.8pt]">
                 Tryb pracy
                 <span className="block text-[6.8pt] font-medium text-slate-600 italic">Work mode</span>
               </th>
-              <th className="w-[13%] py-1 px-1 text-center font-bold border border-slate-400 rounded-none text-[7.8pt]">
+              <th className="w-[12%] py-1 px-1 text-center font-bold border border-slate-400 rounded-none text-[7.8pt]">
                 Data
                 <span className="block text-[6.8pt] font-medium text-slate-600 italic">Date</span>
               </th>
-              <th className="w-[6%] py-1 px-0.5 text-center font-bold border border-slate-400 rounded-none text-[7.8pt]">
+              <th className="w-[5%] py-1 px-0.5 text-center font-bold border border-slate-400 rounded-none text-[7.8pt]">
                 Wkd
                 <span className="block text-[6.8pt] font-medium text-slate-600 italic">Hol.</span>
               </th>
-              <th className="w-[10%] py-1 px-0.5 text-center font-bold border border-slate-400 rounded-none text-[7.8pt]">
+              <th className="w-[9%] py-1 px-0.5 text-center font-bold border border-slate-400 rounded-none text-[7.8pt]">
                 Od
                 <span className="block text-[6.8pt] font-medium text-slate-600 italic">From</span>
               </th>
-              <th className="w-[10%] py-1 px-0.5 text-center font-bold border border-slate-400 rounded-none text-[7.8pt]">
+              <th className="w-[9%] py-1 px-0.5 text-center font-bold border border-slate-400 rounded-none text-[7.8pt]">
                 Do
                 <span className="block text-[6.8pt] font-medium text-slate-600 italic">To</span>
               </th>
@@ -63,7 +63,7 @@ export const DocumentPagesView: React.FC<DocumentPagesViewProps> = ({
                 Suma
                 <span className="block text-[6.8pt] font-medium text-slate-600 italic">Hours</span>
               </th>
-              <th className="w-[41%] py-1 px-2 text-left font-bold border border-slate-400 rounded-none text-[7.8pt]">
+              <th className="w-[45%] py-1 px-2 text-left font-bold border border-slate-400 rounded-none text-[7.8pt]">
                 Opis wykonanych prac
                 <span className="block text-[6.8pt] font-medium text-slate-600 italic">Description of work</span>
               </th>
@@ -74,22 +74,24 @@ export const DocumentPagesView: React.FC<DocumentPagesViewProps> = ({
               const h = calculateHours(row);
               const dayInfo = getDayInfo(row.date);
               const hasHours = h > 0;
+              const rowH = row.rowHeight ? Math.max(row.rowHeight, 38) : 38;
 
               return (
                 <tr
                   key={row.id}
-                  className={`border-b border-slate-300 min-h-[29px] ${
+                  style={{ height: `${rowH}px` }}
+                  className={`border-b border-slate-300 h-[38px] min-h-[38px] ${
                     idx % 2 === 0 ? 'bg-white' : 'bg-slate-50/50 print:bg-white'
                   }`}
                 >
-                  <td className="py-1 px-1 text-center border border-slate-300 align-middle font-medium text-[8.5pt]">
-                    {row.category === 'del' ? 'Delegacja' : row.category === 'biuro' ? 'Biuro' : ''}
+                  <td className="py-1 px-1 text-center border border-slate-300 align-middle font-medium text-[8.5pt] h-[38px]">
+                    {row.category === 'del' ? 'Delegacja' : row.category === 'biuro' ? 'Biuro' : '\u00A0'}
                   </td>
-                  <td className="py-1 px-1 text-center border border-slate-300 align-middle font-medium text-[8.5pt]">
-                    {row.date ? formatDatePL(row.date) : ''}
+                  <td className="py-1 px-1 text-center border border-slate-300 align-middle font-medium text-[8.5pt] h-[38px]">
+                    {row.date ? formatDatePL(row.date) : '\u00A0'}
                   </td>
                   <td
-                    className={`py-1 px-1 text-center border border-slate-300 align-middle font-bold text-[8.5pt] ${
+                    className={`py-1 px-0.5 text-center border border-slate-300 align-middle font-bold text-[8.5pt] h-[38px] ${
                       dayInfo.holiday
                         ? 'text-amber-800'
                         : dayInfo.weekend
@@ -97,27 +99,30 @@ export const DocumentPagesView: React.FC<DocumentPagesViewProps> = ({
                         : 'text-slate-400'
                     }`}
                   >
-                    {row.date && dayInfo.holiday ? 'ŚW' : row.date && dayInfo.weekend ? '✓' : ''}
+                    {row.date && dayInfo.holiday ? 'ŚW' : row.date && dayInfo.weekend ? '✓' : '\u00A0'}
                   </td>
-                  <td className="py-1 px-1 text-center border border-slate-300 align-middle font-mono text-[8.5pt]">
-                    {row.from || ''}
+                  <td className="py-1 px-0.5 text-center border border-slate-300 align-middle font-mono text-[8.5pt] h-[38px]">
+                    {row.from || '\u00A0'}
                   </td>
-                  <td className="py-1 px-1 text-center border border-slate-300 align-middle font-mono text-[8.5pt]">
-                    {row.to || ''}
+                  <td className="py-1 px-0.5 text-center border border-slate-300 align-middle font-mono text-[8.5pt] h-[38px]">
+                    {row.to || '\u00A0'}
                   </td>
-                  <td className="py-1 px-1 text-center border border-slate-300 align-middle font-bold font-mono text-[8.5pt] text-[#0f2742]">
-                    {hasHours ? h.toFixed(2) : ''}
+                  <td className="py-1 px-0.5 text-center border border-slate-300 align-middle font-bold font-mono text-[8.5pt] text-[#0f2742] h-[38px]">
+                    {hasHours ? h.toFixed(2) : '\u00A0'}
                   </td>
-                  <td className="desc-cell py-1 px-2 border border-slate-300 align-middle text-left font-normal text-[8.5pt] leading-normal">
+                  <td
+                    className="desc-cell py-1.5 px-2 border border-slate-300 align-middle text-left font-normal text-[8.5pt] leading-normal h-[38px]"
+                    style={{ height: `${rowH}px` }}
+                  >
                     <div
                       className="desc-print-content whitespace-pre-wrap break-words leading-relaxed"
                       style={{
                         wordBreak: 'break-word',
                         overflowWrap: 'anywhere',
-                        minHeight: row.rowHeight ? `${row.rowHeight}px` : undefined,
+                        minHeight: `${Math.max(rowH - 10, 28)}px`,
                       }}
                     >
-                      {row.description || ''}
+                      {row.description || '\u00A0'}
                     </div>
                   </td>
                 </tr>
