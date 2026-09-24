@@ -10,31 +10,32 @@ export interface PageBreakdown {
 }
 
 // Geometry constants for A4 sheet at 96 DPI:
-// Printable page height inside padding (296mm - 14mm padding) = ~1065px
-export const PAGE_CONTENT_HEIGHT = 1065;
+// Printable page height inside padding (297mm - 11mm padding = 286mm) = ~1080px.
+// We set a conservative safe limit of 1030px to guarantee the bottom footer is never cut off.
+export const PAGE_CONTENT_HEIGHT = 1030;
 
 // Static top block heights:
-// Page 1: CompanyHeader (~85px) + MetaGrid (~135px) + Title (~22px) + TableHeader (~24px) = 266px
-export const PAGE_1_TOP_HEIGHT = 266;
+// Page 1: CompanyHeader (~126px) + MetaGrid (~148px) + Title (~24px) + TableHeader (~34px) = ~332px
+export const PAGE_1_TOP_HEIGHT = 332;
 
-// Continuation Page: Header banner (~28px) + TableHeader (~24px) = 52px
-export const CONTINUATION_TOP_HEIGHT = 52;
+// Continuation Page: Header banner (~34px) + TableHeader (~34px) = 68px
+export const CONTINUATION_TOP_HEIGHT = 68;
 
 // Bottom elements:
-// Last page footer: Signatures (Data + Employer stamp ~56px) + bottom footer line (~22px) = 78px
-export const FOOTER_LAST_PAGE_HEIGHT = 78;
+// Last page footer: Signatures (Data + Employer stamp ~68px) + bottom footer line (~22px) + margins (~8px) = ~98px
+export const FOOTER_LAST_PAGE_HEIGHT = 98;
 
-// Non-last page footer: ONLY bottom footer line ("Nr raportu... Strona X/Y"), NO signatures! = 24px
-export const FOOTER_MIDDLE_PAGE_HEIGHT = 24;
+// Non-last page footer: ONLY bottom footer line ("Nr raportu... Strona X/Y"), NO signatures! = 26px
+export const FOOTER_MIDDLE_PAGE_HEIGHT = 26;
 
-// SummarySection (DELEGACJA, BIURO, WEEKEND / ŚWIĘTO, RAZEM cards) = ~46px
-export const SUMMARY_HEIGHT = 46;
+// SummarySection (DELEGACJA, BIURO, WEEKEND / ŚWIĘTO, RAZEM cards) = ~52px
+export const SUMMARY_HEIGHT = 52;
 
 // Minimum safe distance 'X' between last row / SummarySection and FooterSignatures
-export const MIN_DISTANCE_X = 25;
+export const MIN_DISTANCE_X = 20;
 
-// Base compact row height (+30% increased as requested by user, ~29px)
-export const BASE_ROW_HEIGHT = 29;
+// Base compact row height (+30% increased as requested by user, ~29-30px)
+export const BASE_ROW_HEIGHT = 30;
 
 export function getEstimatedRowHeight(
   row: ReportRow,

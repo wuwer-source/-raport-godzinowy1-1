@@ -133,20 +133,20 @@ export const DocumentPagesView: React.FC<DocumentPagesViewProps> = ({
     <div className="w-full">
       {pages.map((page, pIdx) => (
         <React.Fragment key={`page-${page.pageNumber}`}>
+          {/* Visual Screen Badge placed OUTSIDE the A4 sheet so it does not take printable height */}
+          {showScreenPageBadges && (
+            <div className="no-print w-[210mm] max-w-[210mm] mx-auto flex justify-between items-center pb-1 mb-1.5 border-b border-dashed border-slate-300 text-[8pt] font-mono text-slate-500">
+              <span className="font-semibold text-slate-600">Arkusz A4 — Podgląd wydruku / PDF</span>
+              <span className="font-extrabold text-[#165d9c] bg-blue-50 px-2 py-0.5 rounded border border-blue-200">
+                STRONA {page.pageNumber} z {page.totalPages}
+              </span>
+            </div>
+          )}
+
           {/* Individual A4 Page Sheet - Exactly 210mm x 296mm matching print 1:1 */}
           <div
-            className="a4-print-page w-[210mm] max-w-[210mm] h-[296mm] min-h-[296mm] max-h-[296mm] bg-white text-slate-900 shadow-2xl rounded-xs p-[8mm_10mm_6mm_10mm] mx-auto flex flex-col justify-between mb-8 print:mb-0 print:shadow-none print:rounded-none print:border-none print:w-[210mm] print:h-[296mm] box-border relative overflow-hidden"
+            className="a4-print-page w-[210mm] max-w-[210mm] h-[296mm] min-h-[296mm] max-h-[296mm] bg-white text-slate-900 shadow-2xl rounded-xs p-[6mm_10mm_5mm_10mm] mx-auto flex flex-col justify-between mb-8 print:mb-0 print:shadow-none print:rounded-none print:border-none print:w-[210mm] print:h-[296mm] box-border relative overflow-hidden"
           >
-            {/* Visual Screen Badge showing page info in preview mode */}
-            {showScreenPageBadges && (
-              <div className="no-print flex justify-between items-center pb-1 mb-1.5 border-b border-dashed border-slate-300 text-[8pt] font-mono text-slate-500">
-                <span className="font-semibold text-slate-600">Arkusz A4 — Podgląd wydruku / PDF</span>
-                <span className="font-extrabold text-[#165d9c] bg-blue-50 px-2 py-0.5 rounded border border-blue-200">
-                  STRONA {page.pageNumber} z {page.totalPages}
-                </span>
-              </div>
-            )}
-
             {/* TOP CONTENT: Header, Metadata, Table, Summary (directly under table) */}
             <div className="w-full flex flex-col">
               {page.isFirst ? (
@@ -217,7 +217,7 @@ export const DocumentPagesView: React.FC<DocumentPagesViewProps> = ({
             </div>
 
             {/* BOTTOM CONTENT: Signatures and Footer ALWAYS anchored at the bottom of the page */}
-            <div className="w-full mt-auto shrink-0 avoid-break pt-1">
+            <div className="w-full mt-auto shrink-0 avoid-break pt-1 pb-0.5">
               <FooterSignatures
                 reportDate={header.data_stopka}
                 onReportDateChange={(val) => onChangeHeader && onChangeHeader('data_stopka', val)}

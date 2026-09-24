@@ -24,15 +24,15 @@ export const FooterSignatures: React.FC<FooterSignaturesProps> = ({
   isLastPage = true,
 }) => {
   return (
-    <footer className="w-full flex flex-col justify-end avoid-break">
+    <footer className="w-full flex flex-col justify-end avoid-break shrink-0">
       {/* Signatures block - ONLY present on the LAST page */}
       {isLastPage && (
-        <div className="flex justify-between items-end mb-2 min-h-[52px] px-2 avoid-break">
+        <div className="flex justify-between items-end mb-1.5 min-h-[48px] px-2 avoid-break shrink-0">
           {/* Date block: left side of last page */}
-          <div className="flex flex-col items-center text-center">
-            <div className="w-[170px] min-h-[32px] flex items-end justify-center border-b border-slate-900 pb-0.5 relative group">
+          <div className="flex flex-col items-center text-center shrink-0">
+            <div className="w-[170px] min-h-[28px] flex items-end justify-center border-b border-slate-900 pb-0.5 relative group">
               {isPreview ? (
-                <span className="text-[9.5pt] font-semibold text-slate-900 text-center min-h-[18px]">
+                <span className="text-[9pt] font-semibold text-slate-900 text-center min-h-[18px]">
                   {reportDate ? formatDatePL(reportDate) : ''}
                 </span>
               ) : (
@@ -43,7 +43,7 @@ export const FooterSignatures: React.FC<FooterSignaturesProps> = ({
                       value={reportDate || ''}
                       disabled={disabled}
                       onChange={(e) => onReportDateChange(e.target.value)}
-                      className="w-full text-center text-[9.5pt] font-semibold text-slate-900 bg-transparent border-0 outline-hidden cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="w-full text-center text-[9pt] font-semibold text-slate-900 bg-transparent border-0 outline-hidden cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                     />
                     {reportDate && !disabled && (
                       <button
@@ -64,7 +64,7 @@ export const FooterSignatures: React.FC<FooterSignaturesProps> = ({
                 </>
               )}
             </div>
-            <div className="mt-1 text-[8pt] font-extrabold text-[#0f2742] leading-tight">
+            <div className="mt-0.5 text-[8pt] font-extrabold text-[#0f2742] leading-tight">
               Data
             </div>
             <div className="text-[6.8pt] text-slate-500 italic leading-tight">
@@ -73,11 +73,11 @@ export const FooterSignatures: React.FC<FooterSignaturesProps> = ({
           </div>
 
           {/* Employer stamp & signature: right side of last page */}
-          <div className="flex flex-col items-center text-center">
-            <div className="w-[220px] min-h-[32px] border-b border-slate-900">
+          <div className="flex flex-col items-center text-center shrink-0">
+            <div className="w-[220px] min-h-[28px] border-b border-slate-900">
               {/* Stamp and signature line space */}
             </div>
-            <div className="mt-1 text-[8pt] font-extrabold text-[#0f2742] leading-tight">
+            <div className="mt-0.5 text-[8pt] font-extrabold text-[#0f2742] leading-tight">
               Pieczątka i podpis zlecającego
             </div>
             <div className="text-[6.8pt] text-slate-500 italic leading-tight">
@@ -88,7 +88,7 @@ export const FooterSignatures: React.FC<FooterSignaturesProps> = ({
       )}
 
       {/* Document Footer: Visible both on screen and print, always shows real page numbering on EVERY page */}
-      <div className="pt-1 border-t border-slate-400 text-slate-600 text-[7.5pt] flex justify-between items-center px-1 font-mono">
+      <div className="pt-1 border-t border-slate-400 text-slate-600 text-[7.5pt] flex justify-between items-center px-1 font-mono shrink-0">
         <div>
           <span>Nr raportu: </span>
           <strong className="text-slate-900 font-bold tracking-wider">

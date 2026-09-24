@@ -414,31 +414,31 @@ export function exportEditableHtmlFile(header: ReportHeader, rows: ReportRow[]):
       <div class="flex-1 min-h-[15px] no-print"></div>
 
       <!-- Signatures Footer - Always anchored at the bottom of the page -->
-      <footer class="avoid-break mt-auto pt-1">
-        <div class="flex justify-between items-end mb-2 px-2">
+      <footer class="avoid-break mt-auto pt-1 shrink-0">
+        <div class="flex justify-between items-end mb-1.5 px-2">
           <!-- Date block with clear button -->
-          <div class="flex flex-col items-center text-center">
-            <div class="w-[170px] min-h-[36px] print:min-h-[32px] flex items-end justify-center border-b border-slate-900 pb-0.5 relative group">
+          <div class="flex flex-col items-center text-center shrink-0">
+            <div class="w-[170px] min-h-[30px] print:min-h-[28px] flex items-end justify-center border-b border-slate-900 pb-0.5 relative group">
               <div class="no-print w-full flex items-center justify-center gap-1">
-                <input type="date" id="doc_date" value="${header.data_stopka || ''}" onchange="recalc()" class="w-full text-center text-[9.5pt] font-semibold text-slate-900 bg-transparent border-0 outline-hidden cursor-pointer" />
+                <input type="date" id="doc_date" value="${header.data_stopka || ''}" onchange="recalc()" class="w-full text-center text-[9pt] font-semibold text-slate-900 bg-transparent border-0 outline-hidden cursor-pointer" />
                 <button type="button" onclick="document.getElementById('doc_date').value=''; recalc();" title="Wyczyść datę" class="p-0.5 text-slate-400 hover:text-red-600 rounded cursor-pointer">✕</button>
               </div>
-              <div class="hidden print:block text-center text-[9.5pt] font-semibold text-slate-950 min-h-[18px]" id="doc_date_print">${header.data_stopka || ''}</div>
+              <div class="hidden print:block text-center text-[9pt] font-semibold text-slate-950 min-h-[16px]" id="doc_date_print">${header.data_stopka || ''}</div>
             </div>
-            <div class="mt-1 text-[8.2pt] font-extrabold text-[#0f2742] leading-tight">Data</div>
-            <div class="text-[7pt] text-slate-500 italic leading-tight">Date</div>
+            <div class="mt-0.5 text-[8pt] font-extrabold text-[#0f2742] leading-tight">Data</div>
+            <div class="text-[6.8pt] text-slate-500 italic leading-tight">Date</div>
           </div>
 
           <!-- Employer stamp & signature -->
-          <div class="flex flex-col items-center text-center">
-            <div class="w-[220px] min-h-[36px] print:min-h-[32px] border-b border-slate-900"></div>
-            <div class="mt-1 text-[8.2pt] font-extrabold text-[#0f2742] leading-tight">Pieczątka i podpis zlecającego</div>
-            <div class="text-[7pt] text-slate-500 italic leading-tight">Stamp and signature of Employer</div>
+          <div class="flex flex-col items-center text-center shrink-0">
+            <div class="w-[220px] min-h-[30px] print:min-h-[28px] border-b border-slate-900"></div>
+            <div class="mt-0.5 text-[8pt] font-extrabold text-[#0f2742] leading-tight">Pieczątka i podpis zlecającego</div>
+            <div class="text-[6.8pt] text-slate-500 italic leading-tight">Stamp and signature of Employer</div>
           </div>
         </div>
 
         <!-- Document Footer: Unified across screen and print, always shows real page numbering -->
-        <div class="mt-1.5 pt-1 border-t border-slate-300 text-slate-600 text-[7.5pt] flex justify-between items-center px-1 font-mono">
+        <div class="mt-1 pt-1 border-t border-slate-300 text-slate-600 text-[7.5pt] flex justify-between items-center px-1 font-mono shrink-0">
           <div>
             <span>Nr raportu: </span>
             <strong class="text-slate-800 font-bold tracking-wider" id="footer_doc_num">${escapeHtml(header.report_number || 'KG/26/001')}</strong>
