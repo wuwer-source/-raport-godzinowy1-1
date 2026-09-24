@@ -391,21 +391,33 @@ export function exportEditableHtmlFile(header: ReportHeader, rows: ReportRow[]):
       <!-- Summary Section: 4 cards -->
       <section class="avoid-break mb-3">
         <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 print:grid-cols-4 print:gap-1.5">
-          <div class="border border-slate-300 rounded-lg p-2 text-center flex flex-col justify-between min-h-[46px] bg-slate-50/80 print:bg-white">
-            <div class="text-[7.8pt] font-bold text-slate-700 uppercase tracking-tight">Delegacja</div>
-            <div class="text-[12pt] font-extrabold text-[#0f2742] leading-tight mt-1" id="card_del">0.00 h</div>
+          <div class="border border-slate-300 rounded-lg p-1.5 text-center flex flex-col justify-between min-h-[46px] bg-slate-50/80 print:bg-white">
+            <div>
+              <div class="text-[7.5pt] font-bold text-slate-700 uppercase tracking-tight leading-tight">Delegacja</div>
+              <div class="text-[6.2pt] font-medium text-slate-500 italic leading-tight">Delegation</div>
+            </div>
+            <div class="text-[12pt] font-extrabold text-[#0f2742] leading-tight mt-0.5" id="card_del">0.00 h</div>
           </div>
-          <div class="border border-slate-300 rounded-lg p-2 text-center flex flex-col justify-between min-h-[46px] bg-slate-50/80 print:bg-white">
-            <div class="text-[7.8pt] font-bold text-slate-700 uppercase tracking-tight">Biuro</div>
-            <div class="text-[12pt] font-extrabold text-[#0f2742] leading-tight mt-1" id="card_biuro">0.00 h</div>
+          <div class="border border-slate-300 rounded-lg p-1.5 text-center flex flex-col justify-between min-h-[46px] bg-slate-50/80 print:bg-white">
+            <div>
+              <div class="text-[7.5pt] font-bold text-slate-700 uppercase tracking-tight leading-tight">Biuro</div>
+              <div class="text-[6.2pt] font-medium text-slate-500 italic leading-tight">Office</div>
+            </div>
+            <div class="text-[12pt] font-extrabold text-[#0f2742] leading-tight mt-0.5" id="card_biuro">0.00 h</div>
           </div>
-          <div class="border border-slate-300 rounded-lg p-2 text-center flex flex-col justify-between min-h-[46px] bg-slate-50/80 print:bg-white">
-            <div class="text-[7.8pt] font-bold text-slate-700 uppercase tracking-tight">Weekend / Święto</div>
-            <div class="text-[12pt] font-extrabold text-[#0f2742] leading-tight mt-1" id="card_wkd_hol">0.00 h</div>
+          <div class="border border-slate-300 rounded-lg p-1.5 text-center flex flex-col justify-between min-h-[46px] bg-slate-50/80 print:bg-white">
+            <div>
+              <div class="text-[7.5pt] font-bold text-slate-700 uppercase tracking-tight leading-tight">Weekend / Święto</div>
+              <div class="text-[6.2pt] font-medium text-slate-500 italic leading-tight">Weekend / Holiday</div>
+            </div>
+            <div class="text-[12pt] font-extrabold text-[#0f2742] leading-tight mt-0.5" id="card_wkd_hol">0.00 h</div>
           </div>
-          <div class="border border-blue-300 rounded-lg p-2 text-center flex flex-col justify-between min-h-[46px] bg-blue-50/80 print:bg-slate-100">
-            <div class="text-[7.8pt] font-bold text-slate-700 uppercase tracking-tight">Razem</div>
-            <div class="text-[12pt] font-extrabold text-[#165d9c] leading-tight mt-1" id="card_total">0.00 h</div>
+          <div class="border border-blue-300 rounded-lg p-1.5 text-center flex flex-col justify-between min-h-[46px] bg-blue-50/80 print:bg-slate-100">
+            <div>
+              <div class="text-[7.5pt] font-bold text-slate-700 uppercase tracking-tight leading-tight">Razem</div>
+              <div class="text-[6.2pt] font-medium text-slate-500 italic leading-tight">Total</div>
+            </div>
+            <div class="text-[12pt] font-extrabold text-[#165d9c] leading-tight mt-0.5" id="card_total">0.00 h</div>
           </div>
         </div>
       </section>
