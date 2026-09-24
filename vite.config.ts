@@ -7,7 +7,7 @@ export default defineConfig(({command}) => {
   return {
     // Podczas budowania na GitHub Pages (npm run build) używamy '/raport-godzinowy/',
     // a w lokalnym podglądzie (npm run dev) używamy '/', dzięki czemu podgląd nie jest biały!
-    base: command === 'build' ? '/raport-godzinowy-1/' : '/',
+    base: command === 'build' ? '/-raport-godzinowy-1/' : '/',
     plugins: [react(), tailwindcss()],
     resolve: {
       alias: {
