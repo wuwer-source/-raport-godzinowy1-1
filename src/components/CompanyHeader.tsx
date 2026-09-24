@@ -13,8 +13,8 @@ export const CompanyHeader: React.FC<CompanyHeaderProps> = ({
   onGenerate,
 }) => {
   return (
-    <header className="avoid-break mb-3">
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 pb-2">
+    <header className="avoid-break mb-1.5">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 pb-1">
         <div className="text-[9pt] leading-tight text-slate-800">
           <div className="text-[13pt] font-extrabold tracking-tight text-[#0f2742]">
             WUWER Sp. z o.o.

@@ -43,20 +43,20 @@ export const MetaGrid: React.FC<MetaGridProps> = ({
     return (
       <div
         key={f.id}
-        className="meta-print-row grid grid-cols-[42%_58%] min-h-[35px] border border-slate-300 rounded-lg overflow-hidden bg-white shadow-2xs"
+        className="meta-print-row grid grid-cols-[42%_58%] min-h-[28px] border border-slate-300 rounded-lg overflow-hidden bg-white shadow-2xs"
       >
-        <div className="flex flex-col justify-center px-2.5 py-0.5 bg-[#eef2f7] border-r border-slate-200">
-          <strong className="text-[8.5pt] font-semibold text-slate-900 leading-tight">
+        <div className="flex flex-col justify-center px-2 py-0.5 bg-[#eef2f7] border-r border-slate-200">
+          <strong className="text-[8pt] font-semibold text-slate-900 leading-tight">
             {f.labelPl}
           </strong>
-          <span className="text-[7pt] text-slate-500 italic leading-tight">
+          <span className="text-[6.5pt] text-slate-500 italic leading-tight">
             {f.labelEn}
           </span>
         </div>
 
-        <div className="flex items-center px-2 py-0.5 bg-white">
+        <div className="flex items-center px-1.5 py-0.5 bg-white">
           {isPreview ? (
-            <div className="w-full text-[8.8pt] font-medium text-slate-950 truncate print:font-semibold">
+            <div className="w-full text-[8.2pt] font-medium text-slate-950 truncate print:font-semibold">
               {val}
             </div>
           ) : (
@@ -67,11 +67,11 @@ export const MetaGrid: React.FC<MetaGridProps> = ({
                 onChange={(e) => onChange(f.id, e.target.value)}
                 list={listId}
                 disabled={disabled}
-                className="w-full text-[8.8pt] font-medium text-slate-900 bg-transparent border-0 border-b border-slate-300 focus:border-[#165d9c] focus:outline-hidden py-0.5 px-1 no-print disabled:opacity-60 disabled:cursor-not-allowed"
+                className="w-full text-[8.2pt] font-medium text-slate-900 bg-transparent border-0 border-b border-slate-300 focus:border-[#165d9c] focus:outline-hidden py-0.5 px-1 no-print disabled:opacity-60 disabled:cursor-not-allowed"
                 placeholder={disabled ? 'Generuj dokument aby edytować' : ''}
                 autoComplete="off"
               />
-              <div className="hidden print:block w-full text-[8.5pt] font-semibold text-slate-950">
+              <div className="hidden print:block w-full text-[8pt] font-semibold text-slate-950">
                 {val}
               </div>
             </>
@@ -82,22 +82,22 @@ export const MetaGrid: React.FC<MetaGridProps> = ({
   };
 
   return (
-    <section className="avoid-break mb-2.5">
-      {/* Block 1: 3 fields on the left, 3 fields on the right - with beautifully rounded corners */}
-      <div className="grid grid-cols-2 gap-2">
-        <div className="flex flex-col gap-2">
+    <section className="avoid-break mb-1.5">
+      {/* Block 1: 3 fields on the left, 3 fields on the right */}
+      <div className="grid grid-cols-2 gap-1.5">
+        <div className="flex flex-col gap-1.5">
           {BLOCK_1_LEFT.map(renderStandardField)}
         </div>
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-1.5">
           {BLOCK_1_RIGHT.map(renderStandardField)}
         </div>
       </div>
 
       {/* Subtle separator line */}
-      <div className="my-2 border-b border-slate-200/90 print:border-slate-300 print:my-1.5" />
+      <div className="my-1.5 border-b border-slate-200/90 print:border-slate-300" />
 
-      {/* Block 2: Below the line - beautifully rounded corners */}
-      <div className="grid grid-cols-2 gap-2">
+      {/* Block 2: Below the line */}
+      <div className="grid grid-cols-2 gap-1.5">
         {/* Left: Nr rej. pojazdu */}
         <div>
           {renderStandardField({
@@ -111,18 +111,18 @@ export const MetaGrid: React.FC<MetaGridProps> = ({
         {/* Right: In one single row: Route - km & Nights */}
         <div className="grid grid-cols-2 gap-1.5">
           {/* Trasa - km */}
-          <div className="meta-print-row grid grid-cols-[48%_52%] min-h-[35px] border border-slate-300 rounded-lg overflow-hidden bg-white shadow-2xs">
-            <div className="flex flex-col justify-center px-2 py-0.5 bg-[#eef2f7] border-r border-slate-200">
-              <strong className="text-[7.8pt] font-semibold text-slate-900 leading-tight">
+          <div className="meta-print-row grid grid-cols-[48%_52%] min-h-[28px] border border-slate-300 rounded-lg overflow-hidden bg-white shadow-2xs">
+            <div className="flex flex-col justify-center px-1.5 py-0.5 bg-[#eef2f7] border-r border-slate-200">
+              <strong className="text-[7.5pt] font-semibold text-slate-900 leading-tight">
                 Trasa – km:
               </strong>
-              <span className="text-[6.6pt] text-slate-500 italic leading-tight">
+              <span className="text-[6.2pt] text-slate-500 italic leading-tight">
                 Route – km
               </span>
             </div>
             <div className="flex items-center px-1.5 py-0.5 bg-white">
               {isPreview ? (
-                <div className="w-full text-[8.5pt] font-medium text-slate-950 truncate print:font-semibold">
+                <div className="w-full text-[8pt] font-medium text-slate-950 truncate print:font-semibold">
                   {header.trasa_km}
                 </div>
               ) : (
@@ -133,10 +133,10 @@ export const MetaGrid: React.FC<MetaGridProps> = ({
                     onChange={(e) => onChange('trasa_km', e.target.value)}
                     list="datalist_trasa_km"
                     disabled={disabled}
-                    className="w-full text-[8.5pt] font-medium text-slate-900 bg-transparent border-0 border-b border-slate-300 focus:border-[#165d9c] focus:outline-hidden py-0.5 px-0.5 no-print disabled:opacity-60 disabled:cursor-not-allowed"
+                    className="w-full text-[8pt] font-medium text-slate-900 bg-transparent border-0 border-b border-slate-300 focus:border-[#165d9c] focus:outline-hidden py-0.5 px-0.5 no-print disabled:opacity-60 disabled:cursor-not-allowed"
                     autoComplete="off"
                   />
-                  <div className="hidden print:block w-full text-[8.2pt] font-semibold text-slate-950">
+                  <div className="hidden print:block w-full text-[7.8pt] font-semibold text-slate-950">
                     {header.trasa_km}
                   </div>
                 </>
@@ -145,18 +145,18 @@ export const MetaGrid: React.FC<MetaGridProps> = ({
           </div>
 
           {/* Ilość noclegów */}
-          <div className="meta-print-row grid grid-cols-[48%_52%] min-h-[35px] border border-slate-300 rounded-lg overflow-hidden bg-white shadow-2xs">
-            <div className="flex flex-col justify-center px-2 py-0.5 bg-[#eef2f7] border-r border-slate-200">
-              <strong className="text-[7.8pt] font-semibold text-slate-900 leading-tight">
+          <div className="meta-print-row grid grid-cols-[48%_52%] min-h-[28px] border border-slate-300 rounded-lg overflow-hidden bg-white shadow-2xs">
+            <div className="flex flex-col justify-center px-1.5 py-0.5 bg-[#eef2f7] border-r border-slate-200">
+              <strong className="text-[7.5pt] font-semibold text-slate-900 leading-tight">
                 Noclegi:
               </strong>
-              <span className="text-[6.6pt] text-slate-500 italic leading-tight">
+              <span className="text-[6.2pt] text-slate-500 italic leading-tight">
                 Nights
               </span>
             </div>
             <div className="flex items-center px-1.5 py-0.5 bg-white">
               {isPreview ? (
-                <div className="w-full text-[8.5pt] font-medium text-slate-950 truncate print:font-semibold">
+                <div className="w-full text-[8pt] font-medium text-slate-950 truncate print:font-semibold">
                   {header.noclegi}
                 </div>
               ) : (
@@ -168,10 +168,10 @@ export const MetaGrid: React.FC<MetaGridProps> = ({
                     onChange={(e) => onChange('noclegi', e.target.value)}
                     list="datalist_noclegi"
                     disabled={disabled}
-                    className="w-full text-[8.5pt] font-medium text-slate-900 bg-transparent border-0 border-b border-slate-300 focus:border-[#165d9c] focus:outline-hidden py-0.5 px-0.5 no-print disabled:opacity-60 disabled:cursor-not-allowed text-center"
+                    className="w-full text-[8pt] font-medium text-slate-900 bg-transparent border-0 border-b border-slate-300 focus:border-[#165d9c] focus:outline-hidden py-0.5 px-0.5 no-print disabled:opacity-60 disabled:cursor-not-allowed text-center"
                     autoComplete="off"
                   />
-                  <div className="hidden print:block w-full text-[8.2pt] font-semibold text-slate-950 text-center">
+                  <div className="hidden print:block w-full text-[7.8pt] font-semibold text-slate-950 text-center">
                     {header.noclegi}
                   </div>
                 </>

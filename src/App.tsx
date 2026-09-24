@@ -832,7 +832,7 @@ export default function App() {
             </div>
 
             {/* PRINT-ONLY VIEW: Always renders exact paginated A4 pages when printing from Edit mode */}
-            <div className="hidden print:block">
+            <div className="print-only-pages">
               <DocumentPagesView
                 header={header}
                 rows={rows}

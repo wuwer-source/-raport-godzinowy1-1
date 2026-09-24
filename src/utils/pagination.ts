@@ -9,15 +9,16 @@ export interface PageBreakdown {
   startRowIndex: number;
 }
 
-// Calibrated A4 row limits taking into account that rows are 33% more compact (~23.5px height):
-// Page 1 holds Header, MetaGrid, Table, Summary (directly under table), and Signatures/Footer.
-export const SINGLE_PAGE_MAX_ROWS = 16; // Single page fits up to 16 rows comfortably
-export const MULTI_PAGE_1_MAX_ROWS = 16; // Page 1 of multi-page holds up to 16 rows
+// Calibrated A4 row limits taking into account that rows are 33% more compact (22px / 5.8mm height):
+// On a single page, Header + MetaGrid + Table + Summary (under table) + Signatures/Footer fit comfortably up to 18 rows.
+// If rows > 18, pagination automatically creates continuation page(s) so signatures and footer stay at the bottom.
+export const SINGLE_PAGE_MAX_ROWS = 18; // Single page fits up to 18 rows with comfortable gap
+export const MULTI_PAGE_1_MAX_ROWS = 14; // Page 1 of multi-page holds 14 rows
 export const LAST_PAGE_MAX_ROWS = 22; // Last page has continuation header, rows, Summary, and Signatures/Footer
 export const MIDDLE_PAGE_MAX_ROWS = 26; // Middle pages have continuation header, rows, and Signatures/Footer
 
 export function computePages(rows: ReportRow[]): PageBreakdown[] {
-  // If 16 or fewer rows, keep everything on exactly 1 single page!
+  // If 18 or fewer rows, keep everything on exactly 1 single page!
   if (rows.length <= SINGLE_PAGE_MAX_ROWS) {
     return [
       {
@@ -34,10 +35,10 @@ export function computePages(rows: ReportRow[]): PageBreakdown[] {
   const chunks: { rows: ReportRow[]; startRowIndex: number }[] = [];
 
   // Determine Page 1 rows count:
-  // If total rows is e.g. 17-20 rows, split gracefully so page 2 isn't empty
+  // If total rows is e.g. 19-22 rows, split gracefully so page 2 isn't empty
   let p1Count = MULTI_PAGE_1_MAX_ROWS;
-  if (rows.length <= MULTI_PAGE_1_MAX_ROWS + 4) {
-    p1Count = Math.max(8, Math.ceil(rows.length / 2));
+  if (rows.length <= MULTI_PAGE_1_MAX_ROWS + 6) {
+    p1Count = Math.max(10, Math.ceil(rows.length / 2));
   }
 
   chunks.push({
