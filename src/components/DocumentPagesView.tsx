@@ -17,6 +17,7 @@ interface DocumentPagesViewProps {
   onGenerateDocNumber: () => void;
   onChangeHeader?: (field: keyof ReportHeader, value: string) => void;
   showScreenPageBadges?: boolean;
+  measuredHeights?: Record<string, number>;
 }
 
 export const DocumentPagesView: React.FC<DocumentPagesViewProps> = ({
@@ -28,42 +29,43 @@ export const DocumentPagesView: React.FC<DocumentPagesViewProps> = ({
   onGenerateDocNumber,
   onChangeHeader,
   showScreenPageBadges = true,
+  measuredHeights,
 }) => {
-  const pages: PageBreakdown[] = computePages(rows);
+  const pages: PageBreakdown[] = computePages(rows, measuredHeights);
 
   const renderTableRows = (pageRows: ReportRow[], startIdx: number) => {
     return (
       <div className="w-full overflow-hidden">
-        <table className="doc-table w-full border-collapse border border-slate-500 text-slate-800 text-[8pt] rounded-none">
+        <table className="doc-table w-full border-collapse border border-slate-500 text-slate-800 text-[8.2pt] rounded-none">
           <thead>
-            <tr className="bg-[#dfe8f2] text-[#0f2742] h-[23px]">
-              <th className="w-[12%] py-0 px-1 text-center font-bold border border-slate-400 rounded-none">
+            <tr className="bg-[#dfe8f2] text-[#0f2742] h-[28px]">
+              <th className="w-[12%] py-1 px-1 text-center font-bold border border-slate-400 rounded-none text-[7.8pt]">
                 Tryb pracy
-                <span className="block text-[6.2pt] font-medium text-slate-600 italic">Work mode</span>
+                <span className="block text-[6.8pt] font-medium text-slate-600 italic">Work mode</span>
               </th>
-              <th className="w-[13%] py-0 px-1 text-center font-bold border border-slate-400 rounded-none">
+              <th className="w-[13%] py-1 px-1 text-center font-bold border border-slate-400 rounded-none text-[7.8pt]">
                 Data
-                <span className="block text-[6.2pt] font-medium text-slate-600 italic">Date</span>
+                <span className="block text-[6.8pt] font-medium text-slate-600 italic">Date</span>
               </th>
-              <th className="w-[6%] py-0 px-0.5 text-center font-bold border border-slate-400 rounded-none">
+              <th className="w-[6%] py-1 px-0.5 text-center font-bold border border-slate-400 rounded-none text-[7.8pt]">
                 Wkd
-                <span className="block text-[6.2pt] font-medium text-slate-600 italic">Hol.</span>
+                <span className="block text-[6.8pt] font-medium text-slate-600 italic">Hol.</span>
               </th>
-              <th className="w-[10%] py-0 px-0.5 text-center font-bold border border-slate-400 rounded-none">
+              <th className="w-[10%] py-1 px-0.5 text-center font-bold border border-slate-400 rounded-none text-[7.8pt]">
                 Od
-                <span className="block text-[6.2pt] font-medium text-slate-600 italic">From</span>
+                <span className="block text-[6.8pt] font-medium text-slate-600 italic">From</span>
               </th>
-              <th className="w-[10%] py-0 px-0.5 text-center font-bold border border-slate-400 rounded-none">
+              <th className="w-[10%] py-1 px-0.5 text-center font-bold border border-slate-400 rounded-none text-[7.8pt]">
                 Do
-                <span className="block text-[6.2pt] font-medium text-slate-600 italic">To</span>
+                <span className="block text-[6.8pt] font-medium text-slate-600 italic">To</span>
               </th>
-              <th className="w-[8%] py-0 px-0.5 text-center font-bold border border-slate-400 rounded-none">
+              <th className="w-[8%] py-1 px-0.5 text-center font-bold border border-slate-400 rounded-none text-[7.8pt]">
                 Suma
-                <span className="block text-[6.2pt] font-medium text-slate-600 italic">Hours</span>
+                <span className="block text-[6.8pt] font-medium text-slate-600 italic">Hours</span>
               </th>
-              <th className="w-[41%] py-0 px-1.5 text-left font-bold border border-slate-400 rounded-none">
+              <th className="w-[41%] py-1 px-2 text-left font-bold border border-slate-400 rounded-none text-[7.8pt]">
                 Opis wykonanych prac
-                <span className="block text-[6.2pt] font-medium text-slate-600 italic">Description of work</span>
+                <span className="block text-[6.8pt] font-medium text-slate-600 italic">Description of work</span>
               </th>
             </tr>
           </thead>
@@ -76,18 +78,18 @@ export const DocumentPagesView: React.FC<DocumentPagesViewProps> = ({
               return (
                 <tr
                   key={row.id}
-                  className={`border-b border-slate-300 min-h-[22px] ${
+                  className={`border-b border-slate-300 min-h-[29px] ${
                     idx % 2 === 0 ? 'bg-white' : 'bg-slate-50/50 print:bg-white'
                   }`}
                 >
-                  <td className="py-0 px-1 text-center border border-slate-300 align-middle font-medium text-[7.8pt]">
+                  <td className="py-1 px-1 text-center border border-slate-300 align-middle font-medium text-[8.5pt]">
                     {row.category === 'del' ? 'Delegacja' : row.category === 'biuro' ? 'Biuro' : ''}
                   </td>
-                  <td className="py-0 px-1 text-center border border-slate-300 align-middle font-medium text-[7.8pt]">
+                  <td className="py-1 px-1 text-center border border-slate-300 align-middle font-medium text-[8.5pt]">
                     {row.date ? formatDatePL(row.date) : ''}
                   </td>
                   <td
-                    className={`py-0 px-1 text-center border border-slate-300 align-middle font-bold text-[7.8pt] ${
+                    className={`py-1 px-1 text-center border border-slate-300 align-middle font-bold text-[8.5pt] ${
                       dayInfo.holiday
                         ? 'text-amber-800'
                         : dayInfo.weekend
@@ -97,19 +99,23 @@ export const DocumentPagesView: React.FC<DocumentPagesViewProps> = ({
                   >
                     {row.date && dayInfo.holiday ? 'ŚW' : row.date && dayInfo.weekend ? '✓' : ''}
                   </td>
-                  <td className="py-0 px-1 text-center border border-slate-300 align-middle font-mono text-[7.8pt]">
+                  <td className="py-1 px-1 text-center border border-slate-300 align-middle font-mono text-[8.5pt]">
                     {row.from || ''}
                   </td>
-                  <td className="py-0 px-1 text-center border border-slate-300 align-middle font-mono text-[7.8pt]">
+                  <td className="py-1 px-1 text-center border border-slate-300 align-middle font-mono text-[8.5pt]">
                     {row.to || ''}
                   </td>
-                  <td className="py-0 px-1 text-center border border-slate-300 align-middle font-bold font-mono text-[7.8pt] text-[#0f2742]">
+                  <td className="py-1 px-1 text-center border border-slate-300 align-middle font-bold font-mono text-[8.5pt] text-[#0f2742]">
                     {hasHours ? h.toFixed(2) : ''}
                   </td>
-                  <td className="py-0.5 px-1.5 border border-slate-300 align-middle text-left font-normal text-[7.8pt] leading-tight">
+                  <td className="desc-cell py-1 px-2 border border-slate-300 align-middle text-left font-normal text-[8.5pt] leading-normal">
                     <div
-                      className="whitespace-pre-wrap break-words leading-tight"
-                      style={row.rowHeight ? { minHeight: `${row.rowHeight}px` } : undefined}
+                      className="desc-print-content whitespace-pre-wrap break-words leading-relaxed"
+                      style={{
+                        wordBreak: 'break-word',
+                        overflowWrap: 'anywhere',
+                        minHeight: row.rowHeight ? `${row.rowHeight}px` : undefined,
+                      }}
                     >
                       {row.description || ''}
                     </div>

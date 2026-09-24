@@ -26,6 +26,27 @@ export const HoursTable: React.FC<HoursTableProps> = ({
   disabled = false,
   pageBreakIndex,
 }) => {
+  // Real-time drag resize handler for row height with visible grip handle
+  const handleStartResize = (e: React.MouseEvent, rowId: string, currentHeight: number = 30) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const startY = e.clientY;
+    const initialH = currentHeight;
+
+    const onMouseMove = (moveEvent: MouseEvent) => {
+      const deltaY = moveEvent.clientY - startY;
+      const newHeight = Math.max(30, Math.min(260, Math.round(initialH + deltaY)));
+      onRowChange(rowId, 'rowHeight', newHeight);
+    };
+
+    const onMouseUp = () => {
+      window.removeEventListener('mousemove', onMouseMove);
+      window.removeEventListener('mouseup', onMouseUp);
+    };
+
+    window.addEventListener('mousemove', onMouseMove);
+    window.addEventListener('mouseup', onMouseUp);
+  };
   return (
     <section className="mb-2.5">
       {/* Table Title - Placed cleanly above the table as requested */}
@@ -132,7 +153,7 @@ export const HoursTable: React.FC<HoursTableProps> = ({
                   <tr
                     key={row.id}
                     data-row-id={row.id}
-                    className={`border-b border-slate-300 transition-colors min-h-[22px] ${
+                    className={`border-b border-slate-300 transition-colors min-h-[29px] ${
                       isInvalid
                         ? 'bg-amber-50/80 hover:bg-amber-100/60 print:bg-white'
                         : idx % 2 === 0
@@ -143,7 +164,7 @@ export const HoursTable: React.FC<HoursTableProps> = ({
                   {/* Category / Tryb pracy */}
                   <td className="py-0 px-1 text-center border border-slate-300 align-middle">
                     {isPreview ? (
-                      <span className="font-medium text-[7.8pt]">
+                      <span className="font-medium text-[8.5pt]">
                         {row.category === 'del' ? 'Delegacja' : row.category === 'biuro' ? 'Biuro' : ''}
                       </span>
                     ) : (
@@ -153,7 +174,7 @@ export const HoursTable: React.FC<HoursTableProps> = ({
                             value={row.category}
                             disabled={disabled}
                             onChange={(e) => onRowChange(row.id, 'category', e.target.value)}
-                            className="w-full text-[8pt] font-medium bg-transparent border-0 outline-hidden py-0 text-center cursor-pointer focus:bg-white focus:ring-1 focus:ring-blue-500 rounded disabled:opacity-50 disabled:cursor-not-allowed h-[22px]"
+                            className="w-full text-[8.5pt] font-medium bg-transparent border-0 outline-hidden py-0 text-center cursor-pointer focus:bg-white focus:ring-1 focus:ring-blue-500 rounded disabled:opacity-50 disabled:cursor-not-allowed h-[26px]"
                           >
                             <option value="">—</option>
                             <option value="del">Delegacja</option>
@@ -161,7 +182,7 @@ export const HoursTable: React.FC<HoursTableProps> = ({
                           </select>
                         </div>
                         {/* Print only: Clean text or completely empty */}
-                        <div className="hidden print:block print-cell-text text-center text-[7.8pt] font-medium">
+                        <div className="hidden print:block print-cell-text text-center text-[8.5pt] font-medium">
                           {row.category === 'del' ? 'Delegacja' : row.category === 'biuro' ? 'Biuro' : ''}
                         </div>
                       </>
@@ -169,9 +190,9 @@ export const HoursTable: React.FC<HoursTableProps> = ({
                   </td>
 
                   {/* Date */}
-                  <td className="py-0 px-1 text-center border border-slate-300 align-middle h-[22px]">
+                  <td className="py-0 px-1 text-center border border-slate-300 align-middle h-[26px]">
                     {isPreview ? (
-                      <span className="font-medium text-[7.8pt]">{row.date ? formatDatePL(row.date) : ''}</span>
+                      <span className="font-medium text-[8.5pt]">{row.date ? formatDatePL(row.date) : ''}</span>
                     ) : (
                       <>
                         <div className="no-print">
@@ -180,11 +201,11 @@ export const HoursTable: React.FC<HoursTableProps> = ({
                             value={row.date}
                             disabled={disabled}
                             onChange={(e) => onRowChange(row.id, 'date', e.target.value)}
-                            className="w-full text-[8pt] bg-transparent border-0 outline-hidden py-0 px-0.5 text-center focus:bg-white focus:ring-1 focus:ring-blue-500 rounded disabled:opacity-50 disabled:cursor-not-allowed h-[22px]"
+                            className="w-full text-[8.5pt] bg-transparent border-0 outline-hidden py-0 px-0.5 text-center focus:bg-white focus:ring-1 focus:ring-blue-500 rounded disabled:opacity-50 disabled:cursor-not-allowed h-[26px]"
                           />
                         </div>
                         {/* Print only: Clean date or completely empty */}
-                        <div className="hidden print:block print-cell-text text-center text-[7.8pt] font-medium">
+                        <div className="hidden print:block print-cell-text text-center text-[8.5pt] font-medium">
                           {row.date ? formatDatePL(row.date) : ''}
                         </div>
                       </>
@@ -193,7 +214,7 @@ export const HoursTable: React.FC<HoursTableProps> = ({
 
                   {/* Weekend / Holiday */}
                   <td
-                    className={`py-0 px-0.5 text-center border border-slate-300 align-middle font-bold text-[7.8pt] h-[22px] ${
+                    className={`py-0 px-0.5 text-center border border-slate-300 align-middle font-bold text-[8.5pt] h-[26px] ${
                       dayInfo.holiday
                         ? 'text-amber-800'
                         : dayInfo.weekend
@@ -206,9 +227,9 @@ export const HoursTable: React.FC<HoursTableProps> = ({
                   </td>
 
                   {/* From */}
-                  <td className="py-0 px-0.5 text-center border border-slate-300 align-middle h-[22px]">
+                  <td className="py-0 px-0.5 text-center border border-slate-300 align-middle h-[26px]">
                     {isPreview ? (
-                      <span className="font-mono text-[7.8pt]">{row.from || ''}</span>
+                      <span className="font-mono text-[8.5pt]">{row.from || ''}</span>
                     ) : (
                       <>
                         <div className="no-print">
@@ -219,7 +240,7 @@ export const HoursTable: React.FC<HoursTableProps> = ({
                           />
                         </div>
                         {/* Print only: Value or clean empty cell */}
-                        <div className="hidden print:block print-cell-text font-mono text-[7.8pt] text-center">
+                        <div className="hidden print:block print-cell-text font-mono text-[8.5pt] text-center">
                           {row.from || ''}
                         </div>
                       </>
@@ -227,9 +248,9 @@ export const HoursTable: React.FC<HoursTableProps> = ({
                   </td>
 
                   {/* To */}
-                  <td className="py-0 px-0.5 text-center border border-slate-300 align-middle h-[22px]">
+                  <td className="py-0 px-0.5 text-center border border-slate-300 align-middle h-[26px]">
                     {isPreview ? (
-                      <span className="font-mono text-[7.8pt]">{row.to || ''}</span>
+                      <span className="font-mono text-[8.5pt]">{row.to || ''}</span>
                     ) : (
                       <>
                         <div className="no-print">
@@ -240,7 +261,7 @@ export const HoursTable: React.FC<HoursTableProps> = ({
                           />
                         </div>
                         {/* Print only: Value or clean empty cell */}
-                        <div className="hidden print:block print-cell-text font-mono text-[7.8pt] text-center">
+                        <div className="hidden print:block print-cell-text font-mono text-[8.5pt] text-center">
                           {row.to || ''}
                         </div>
                       </>
@@ -248,47 +269,69 @@ export const HoursTable: React.FC<HoursTableProps> = ({
                   </td>
 
                   {/* Calculated Hours - In print: completely empty if 0 so handwriting can be used */}
-                  <td className="py-0 px-0.5 text-center border border-slate-300 align-middle font-bold text-[#0f2742] text-[7.8pt] h-[22px]">
+                  <td className="py-1 px-0.5 text-center border border-slate-300 align-middle font-bold text-[#0f2742] text-[8.5pt]">
                     <span className="no-print">
-                      {hasHours ? h.toFixed(2) : <span className="text-slate-300 text-[7.2pt]">—</span>}
+                      {hasHours ? h.toFixed(2) : <span className="text-slate-300 text-[7.5pt]">—</span>}
                     </span>
                     <span className="hidden print:inline font-bold">
                       {hasHours ? h.toFixed(2) : ''}
                     </span>
                   </td>
 
-                  {/* Description */}
-                  <td className="py-0.5 px-1 border border-slate-300 align-middle text-left">
+                  {/* Description - with visible drag handle for resizing and word wrap */}
+                  <td className="desc-cell py-1 px-1 border border-slate-300 align-middle text-left relative">
                     {isPreview ? (
                       <div
-                        className="text-[7.8pt] whitespace-pre-wrap break-words leading-tight py-0.5 px-1"
-                        style={row.rowHeight ? { minHeight: `${row.rowHeight}px` } : undefined}
+                        className="desc-print-content text-[8.5pt] whitespace-pre-wrap break-words leading-relaxed py-0.5 px-1"
+                        style={{
+                          wordBreak: 'break-word',
+                          overflowWrap: 'anywhere',
+                          minHeight: row.rowHeight ? `${row.rowHeight}px` : undefined,
+                        }}
                       >
                         {row.description || ''}
                       </div>
                     ) : (
                       <>
-                        <div className="no-print">
+                        <div className="no-print relative">
                           <textarea
                             value={row.description}
                             disabled={disabled}
                             onChange={(e) => onRowChange(row.id, 'description', e.target.value)}
                             onMouseUp={(e) => {
                               const el = e.currentTarget;
-                              if (el && el.offsetHeight && Math.abs(el.offsetHeight - (row.rowHeight || 24)) > 2) {
+                              if (el && el.offsetHeight && Math.abs(el.offsetHeight - (row.rowHeight || 29)) > 2) {
                                 onRowChange(row.id, 'rowHeight', el.offsetHeight);
                               }
                             }}
                             rows={1}
                             placeholder={disabled ? '' : 'Opis wykonanych prac...'}
-                            style={row.rowHeight ? { height: `${row.rowHeight}px` } : undefined}
-                            className="w-full text-[8pt] bg-transparent border border-transparent hover:border-slate-300 focus:border-[#165d9c] outline-hidden py-0.5 px-1 resize-y leading-tight focus:bg-white focus:ring-1 focus:ring-blue-500 rounded min-h-[24px] max-h-[160px] disabled:opacity-50 disabled:cursor-not-allowed cursor-text"
+                            style={{
+                              height: row.rowHeight ? `${row.rowHeight}px` : undefined,
+                              minHeight: '29px',
+                              resize: 'vertical',
+                            }}
+                            className="desc-resize-textarea w-full text-[8.5pt] bg-white border border-slate-300 hover:border-slate-400 focus:border-[#165d9c] outline-hidden py-1 px-1.5 pr-5 leading-snug rounded focus:ring-1 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed cursor-text"
                           />
+                          {/* Znaczek poszerzenia / Drag Handle - Always visible to drag and resize row */}
+                          <div
+                            onMouseDown={(e) => handleStartResize(e, row.id, row.rowHeight || 29)}
+                            title="Przeciągnij w dół, aby poszerzyć/zwiększyć wysokość wiersza"
+                            className="absolute bottom-1 right-1 cursor-ns-resize p-0.5 text-slate-400 hover:text-[#165d9c] hover:bg-blue-50 rounded transition-colors select-none group/grip"
+                          >
+                            <svg viewBox="0 0 10 10" className="w-2.5 h-2.5" fill="currentColor">
+                              <path d="M8.5 8.5H7.5V7.5H8.5V8.5ZM8.5 6H7.5V5H8.5V6ZM6 8.5H5V7.5H6V8.5ZM8.5 3.5H7.5V2.5H8.5V3.5ZM6 6H5V5H6V6ZM3.5 8.5H2.5V7.5H3.5V8.5Z" />
+                            </svg>
+                          </div>
                         </div>
-                        {/* Print only: text or clean empty space */}
+                        {/* Print only: text or clean empty space, word wrapped */}
                         <div
-                          className="hidden print:block print-cell-text text-[7.8pt] whitespace-pre-wrap break-words leading-tight py-0.5 px-1"
-                          style={row.rowHeight ? { minHeight: `${row.rowHeight}px` } : undefined}
+                          className="hidden print:block print-cell-text desc-print-content text-[8.5pt] whitespace-pre-wrap break-words leading-relaxed py-1 px-1.5"
+                          style={{
+                            wordBreak: 'break-word',
+                            overflowWrap: 'anywhere',
+                            minHeight: row.rowHeight ? `${row.rowHeight}px` : undefined,
+                          }}
                         >
                           {row.description || ''}
                         </div>
@@ -298,7 +341,7 @@ export const HoursTable: React.FC<HoursTableProps> = ({
 
                   {/* Actions column (desktop/screen only) */}
                   {!isPreview && (
-                    <td className="py-0 px-0.5 text-center border border-slate-300 align-middle print:hidden no-print h-[22px]">
+                    <td className="py-1 px-0.5 text-center border border-slate-300 align-middle print:hidden no-print">
                       <div className="flex items-center justify-center gap-0.5">
                         <button
                           type="button"

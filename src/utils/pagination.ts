@@ -14,45 +14,48 @@ export interface PageBreakdown {
 export const PAGE_CONTENT_HEIGHT = 1065;
 
 // Static top block heights:
-// Page 1: CompanyHeader (~88px) + MetaGrid (~138px) + Title (~22px) + TableHeader (~24px) = 272px
-export const PAGE_1_TOP_HEIGHT = 272;
+// Page 1: CompanyHeader (~85px) + MetaGrid (~135px) + Title (~22px) + TableHeader (~24px) = 266px
+export const PAGE_1_TOP_HEIGHT = 266;
 
 // Continuation Page: Header banner (~28px) + TableHeader (~24px) = 52px
 export const CONTINUATION_TOP_HEIGHT = 52;
 
-// Bottom fixed elements:
-// FooterSignatures (Signatures grid ~62px + footer line ~20px) = ~82px
-export const FOOTER_HEIGHT = 82;
+// Bottom elements:
+// Last page footer: Signatures (Data + Employer stamp ~56px) + bottom footer line (~22px) = 78px
+export const FOOTER_LAST_PAGE_HEIGHT = 78;
+
+// Non-last page footer: ONLY bottom footer line ("Nr raportu... Strona X/Y"), NO signatures! = 24px
+export const FOOTER_MIDDLE_PAGE_HEIGHT = 24;
 
 // SummarySection (DELEGACJA, BIURO, WEEKEND / ŚWIĘTO, RAZEM cards) = ~46px
 export const SUMMARY_HEIGHT = 46;
 
-// Minimum safe distance 'X' between the last row / SummarySection and FooterSignatures
-// As requested by user:
-// "Jeśli zawęzi się do wartości x czyli jest blisko ustal ta wartość sam tak żeby był miejsce na podpis i pieczatke.
-// Jeśli ta wartość zostanie przekroczona to tabela jest generowana na nowej stronie"
-export const MIN_DISTANCE_X = 40;
+// Minimum safe distance 'X' between last row / SummarySection and FooterSignatures
+export const MIN_DISTANCE_X = 25;
+
+// Base compact row height (+30% increased as requested by user, ~29px)
+export const BASE_ROW_HEIGHT = 29;
 
 export function getEstimatedRowHeight(
   row: ReportRow,
   measuredHeights?: Record<string, number>
 ): number {
-  if (measuredHeights && measuredHeights[row.id] && measuredHeights[row.id] >= 22) {
+  if (measuredHeights && measuredHeights[row.id] && measuredHeights[row.id] >= 28) {
     return measuredHeights[row.id];
   }
-  if (row.rowHeight && row.rowHeight >= 22) {
+  if (row.rowHeight && row.rowHeight >= 28) {
     return row.rowHeight;
   }
   // Calculate based on line breaks and text length
   const text = row.description || '';
-  if (!text) return 22;
+  if (!text) return BASE_ROW_HEIGHT;
 
   const lines = text.split('\n');
   let visualLines = 0;
   for (const line of lines) {
-    visualLines += Math.max(1, Math.ceil(line.length / 40));
+    visualLines += Math.max(1, Math.ceil(line.length / 36));
   }
-  return Math.max(22, 22 + (visualLines - 1) * 14);
+  return Math.max(BASE_ROW_HEIGHT, BASE_ROW_HEIGHT + (visualLines - 1) * 16);
 }
 
 export function computePages(
@@ -77,9 +80,8 @@ export function computePages(
   const totalRowsHeight = rowHeights.reduce((sum, h) => sum + h, 0);
 
   // Check if ALL rows fit on Page 1 (with SummarySection + MIN_DISTANCE_X + FooterSignatures):
-  // Distance from Summary to Footer = PAGE_CONTENT_HEIGHT - PAGE_1_TOP_HEIGHT - totalRowsHeight - SUMMARY_HEIGHT - FOOTER_HEIGHT
   const distanceOnSinglePage =
-    PAGE_CONTENT_HEIGHT - PAGE_1_TOP_HEIGHT - totalRowsHeight - SUMMARY_HEIGHT - FOOTER_HEIGHT;
+    PAGE_CONTENT_HEIGHT - PAGE_1_TOP_HEIGHT - totalRowsHeight - SUMMARY_HEIGHT - FOOTER_LAST_PAGE_HEIGHT;
 
   if (distanceOnSinglePage >= MIN_DISTANCE_X) {
     // Fits comfortably on exactly 1 single page!
@@ -95,7 +97,8 @@ export function computePages(
     ];
   }
 
-  // Otherwise, distance shrank below X! We need multiple pages.
+  // Otherwise, rows don't fit on 1 page with Summary and Signatures. We split across pages.
+  // Rebalance rows to prevent leaving the final page with an empty field ("puste pole").
   const chunks: { rows: ReportRow[]; startRowIndex: number }[] = [];
   let remainingRows = [...rows];
   let remainingHeights = [...rowHeights];
@@ -108,7 +111,7 @@ export function computePages(
     // Check if ALL remaining rows could fit on this page as the LAST page:
     const remainingTotalHeight = remainingHeights.reduce((sum, h) => sum + h, 0);
     const distanceIfLast =
-      PAGE_CONTENT_HEIGHT - topHeight - remainingTotalHeight - SUMMARY_HEIGHT - FOOTER_HEIGHT;
+      PAGE_CONTENT_HEIGHT - topHeight - remainingTotalHeight - SUMMARY_HEIGHT - FOOTER_LAST_PAGE_HEIGHT;
 
     if (distanceIfLast >= MIN_DISTANCE_X) {
       // All remaining rows fit on this final page!
@@ -119,10 +122,10 @@ export function computePages(
       break;
     }
 
-    // Otherwise, this page cannot be the last page. Fill it with as many rows as possible without SummarySection,
-    // ensuring at least MIN_DISTANCE_X from the last row on this page to FooterSignatures.
+    // Otherwise, this page cannot be the last page. Fill it with rows without SummarySection,
+    // and without signatures (only the thin footer line is at the bottom).
     const maxAllowedRowsHeight =
-      PAGE_CONTENT_HEIGHT - topHeight - FOOTER_HEIGHT - MIN_DISTANCE_X;
+      PAGE_CONTENT_HEIGHT - topHeight - FOOTER_MIDDLE_PAGE_HEIGHT - 10;
 
     let accumulatedHeight = 0;
     let countForThisPage = 0;
@@ -136,8 +139,23 @@ export function computePages(
       }
     }
 
-    // Safety: ensure at least 1 row moves forward to avoid infinite loop
-    if (countForThisPage === 0) {
+    // Rebalancing: avoid leaving the next page with only 1-4 rows which creates large empty space
+    const remainingAfter = remainingRows.length - countForThisPage;
+    if (remainingAfter > 0 && remainingAfter < 5) {
+      const minDesiredOnNextPage = Math.min(5, Math.floor(remainingRows.length / 2));
+      const adjustedCount = remainingRows.length - minDesiredOnNextPage;
+      if (adjustedCount > 0) {
+        countForThisPage = adjustedCount;
+      }
+    } else if (remainingAfter === 0) {
+      // If countForThisPage would take all rows, but distanceIfLast was < MIN_DISTANCE_X,
+      // split roughly in half so both pages look filled and balanced
+      const half = Math.max(1, Math.floor(remainingRows.length / 2));
+      countForThisPage = half;
+    }
+
+    // Safety: ensure at least 1 row moves forward
+    if (countForThisPage <= 0) {
       countForThisPage = 1;
     }
 

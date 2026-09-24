@@ -119,10 +119,9 @@ export function exportEditableHtmlFile(header: ReportHeader, rows: ReportRow[]):
       }
       .doc-table td {
         border: 1px solid #64748b !important;
-        padding: 2px 3px !important;
-        font-size: 7.8pt !important;
-        height: 23px !important;
-        min-height: 23px !important;
+        padding: 3px 4px !important;
+        font-size: 8.2pt !important;
+        min-height: 29px !important;
         vertical-align: middle !important;
         break-inside: avoid !important;
         page-break-inside: avoid !important;
@@ -416,30 +415,23 @@ export function exportEditableHtmlFile(header: ReportHeader, rows: ReportRow[]):
 
       <!-- Signatures Footer - Always anchored at the bottom of the page -->
       <footer class="avoid-break mt-auto pt-1">
-        <div class="grid grid-cols-3 gap-3 pt-2 mb-2">
+        <div class="flex justify-between items-end mb-2 px-2">
           <!-- Date block with clear button -->
           <div class="flex flex-col items-center text-center">
-            <div class="w-[155px] min-h-[40px] print:min-h-[34px] flex items-end justify-center border-b border-slate-900 pb-0.5 relative group">
+            <div class="w-[170px] min-h-[36px] print:min-h-[32px] flex items-end justify-center border-b border-slate-900 pb-0.5 relative group">
               <div class="no-print w-full flex items-center justify-center gap-1">
-                <input type="date" id="doc_date" value="${header.data_stopka || ''}" onchange="recalc()" class="w-full text-center text-[10pt] font-semibold text-slate-900 bg-transparent border-0 outline-hidden cursor-pointer" />
+                <input type="date" id="doc_date" value="${header.data_stopka || ''}" onchange="recalc()" class="w-full text-center text-[9.5pt] font-semibold text-slate-900 bg-transparent border-0 outline-hidden cursor-pointer" />
                 <button type="button" onclick="document.getElementById('doc_date').value=''; recalc();" title="Wyczyść datę" class="p-0.5 text-slate-400 hover:text-red-600 rounded cursor-pointer">✕</button>
               </div>
-              <div class="hidden print:block text-center text-[10pt] font-semibold text-slate-950 min-h-[18px]" id="doc_date_print">${header.data_stopka || ''}</div>
+              <div class="hidden print:block text-center text-[9.5pt] font-semibold text-slate-950 min-h-[18px]" id="doc_date_print">${header.data_stopka || ''}</div>
             </div>
             <div class="mt-1 text-[8.2pt] font-extrabold text-[#0f2742] leading-tight">Data</div>
             <div class="text-[7pt] text-slate-500 italic leading-tight">Date</div>
           </div>
 
-          <!-- Contractor signature -->
-          <div class="flex flex-col items-center text-center">
-            <div class="w-[180px] min-h-[40px] print:min-h-[34px] border-b border-slate-900"></div>
-            <div class="mt-1 text-[8.2pt] font-extrabold text-[#0f2742] leading-tight">Podpis wykonawcy</div>
-            <div class="text-[7pt] text-slate-500 italic leading-tight">Contractor signature</div>
-          </div>
-
           <!-- Employer stamp & signature -->
           <div class="flex flex-col items-center text-center">
-            <div class="w-[190px] min-h-[40px] print:min-h-[34px] border-b border-slate-900"></div>
+            <div class="w-[220px] min-h-[36px] print:min-h-[32px] border-b border-slate-900"></div>
             <div class="mt-1 text-[8.2pt] font-extrabold text-[#0f2742] leading-tight">Pieczątka i podpis zlecającego</div>
             <div class="text-[7pt] text-slate-500 italic leading-tight">Stamp and signature of Employer</div>
           </div>
@@ -524,7 +516,7 @@ export function exportEditableHtmlFile(header: ReportHeader, rows: ReportRow[]):
             <div class="no-print">
               <textarea onchange="updateRow(\${idx}, 'description', this.value)" placeholder="Opis wykonanych prac..." class="w-full text-[8pt] bg-transparent border-0 outline-hidden py-1 px-1.5 resize-y leading-snug min-h-[28px]">\${r.description || ''}</textarea>
             </div>
-            <div class="hidden print:block print-cell-text text-[7.8pt] whitespace-pre-wrap break-words leading-tight py-0.5 px-1 min-h-[22px]">\${r.description || ''}</div>
+            <div class="hidden print:block print-cell-text text-[8.2pt] whitespace-pre-wrap break-words leading-tight py-1 px-1 min-h-[29px]">\${r.description || ''}</div>
           </td>
           <td class="p-1 text-center border border-slate-300 align-middle no-print">
             <button type="button" onclick="deleteRow(\${idx})" title="Usuń wiersz" class="p-1 text-slate-400 hover:text-red-600 cursor-pointer">🗑️</button>
